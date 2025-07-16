@@ -48,7 +48,13 @@ func get_input(delta) -> void:
 		OnWall = false
 
 	if Airborne:
-		pass
+		if not GroundSlam and Input.is_action_just_pressed("Slide"):
+			groundDistance = 0
+			velocity.x = 0
+			JumpStorage = false
+			GroundSlam = true
+			$Slide2.emitting = true
+			groundDistance = 0
 	else:
 		if Input.is_action_pressed("Slide"):
 			Sliding = true
@@ -156,16 +162,6 @@ func get_input(delta) -> void:
 				#GroundSlam
 				if GroundSlam and not JumpStorage:
 					velocity.y = GROUNDPOUND_SPEED
-	#GroundSlam debounce
-	if Input.is_action_just_pressed("Slide"):
-		#ground slam
-		if not Airborne and not GroundSlam:
-			groundDistance = 0
-			velocity.x = 0
-			JumpStorage = false
-			GroundSlam = true
-			$Slide2.emitting = true
-			groundDistance = 0
 	#Dashing
 	if Input.is_action_just_pressed("Dash"):
 		dashingTime = DASH_LENGHT
