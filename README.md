@@ -19,9 +19,9 @@ Was used to test if vscode could also save to github, it can :)
 ### Rewriting movement ~3h 15m
 I unspagetified my code and started using enum for my player movement to make it more clearer as there still is some of my old code that i will go trogh later :)
 but now break time and write devlog
->As well implemented better movement
->walking - simple AD
->dashing - shift (takes 1 stamina)
->jump - space
->walljump - space when on wall (has coyote time) (only 3 times)
->wallslide - sliding on walls makes you fallslower for time
+> As well implemented better movement
+> - walking - simple AD
+> - dashing - shift (takes 1 stamina)
+> - jump - space
+> - walljump - space when on wall (has coyote time) (only 3 times)
+> - wallslide - sliding on walls makes you fallslower for time
