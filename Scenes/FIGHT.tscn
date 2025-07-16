@@ -66,6 +66,6 @@ StageGui = NodePath("../Cage/Bottom/Control")
 
 [node name="Cage" parent="." instance=ExtResource("3_yp62b")]
 CagePosition = Vector2(0, 30)
-CageSize = Vector2(1000, 240)
+CageSize = Vector2(500, 240)
 
 [editable path="Cage"]
