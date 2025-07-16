@@ -25,7 +25,7 @@ but now break time and write devlog
 > - jump - space
 > - walljump - space when on wall (has coyote time) (only 3 times)
 > - wallslide - sliding on walls makes you fallslower for time
-### Adding more movement ~1s 37m
+### [UPDATED ITCH] Adding more movement ~1s 37m
 More movement :D
 > - jumpdash - takes 2 stamina but makes you even more faster
 > - groundslam - when in air ctrl and you start to fast fall and can't move, but after landing you can jump again to get to same hights or slide in biger speeds
