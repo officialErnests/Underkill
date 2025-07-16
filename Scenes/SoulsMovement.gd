@@ -3,13 +3,16 @@ extends CharacterBody2D
 var walljumps = 3
 
 #player variables
-const SPEED = 400
-const GRAVITY = 70
+const SPEED = 200
+const GRAVITY = 100
 const JUMP_HEIGHT = 500
-const GROUNDPOUND_SPEED = 800
-const DASH_SPEED = 1000
-const DASH_LENGHT = 0.1
-const WALL_COYOTE = 0.1
+const GROUNDSLAM_SPEED = 1500
+const GROUNDSLAM_RECOVERY = 0.2
+const GROUNDSLAM_DISTANCE = 0.2
+const DASH_SPEED = 750
+const DASH_LENGHT = 0.2
+const WALL_COYOTE = 0.2
+const SLIDE_SPEED = 300
 
 
 #env variables
@@ -20,7 +23,6 @@ var Sliding = false
 var CanMove = true
 var Airborne = false
 var OnWall = false
-var GroundSlam = false
 var JumpStorage = false
 var Invincible = false
 
@@ -36,7 +38,8 @@ enum EnumPlrMovement {
 	WALL_HUG,
 	WALL_SLIDE,
 	AIRBORNE, 
-	GROUNDED
+	GROUNDED,
+	JUMP_STORAGE
 }
 #State
 var CurentPlayersState = EnumPlayerStates.AIR
@@ -51,6 +54,10 @@ var lastDirection = 1
 var energy = 3
 var wallCoyoti = 0
 var wallNormal = Vector2(0,0)
+var prevPrint = ""
+var groundslamRecoveryTime = 0
+var groundslamDistance = 0
+var slideSpeed = 0
 
 func Movement(delta) -> void:
 	var input_direction = Input.get_vector("Left", "Right", "Up", "Down")
@@ -98,22 +105,41 @@ func ResetWallJumps() -> void:
 	walljumps = 3
 	wallSlideSpeed = 0.1
 
+func DetGroundslam() -> void:
+	if Input.is_action_just_pressed("Slide"):
+		groundslamDistance = 0
+		PlrMovement = EnumPlrMovement.GROUND_SLAM
 
 func DetJump() -> void:
 	if Input.is_action_just_pressed("Jump"):
 		velocity.y -= JUMP_HEIGHT
+		PlrMovement = EnumPlrMovement.AIRBORNE
 
 func DetWallJump() -> void:
 	if Input.is_action_just_pressed("Jump") and walljumps > 0:
 		walljumps -= 1
 		velocity.y = -JUMP_HEIGHT
 		velocity.x = wallNormal.x * SPEED
+		$Slide.emitting = false
+		if PlrMovement == EnumPlrMovement.GROUND_SLAM or PlrMovement == EnumPlrMovement.JUMP_STORAGE:
+			PlrMovement = EnumPlrMovement.JUMP_STORAGE
+		else:
+			PlrMovement = EnumPlrMovement.AIRBORNE
 
 func DetDash() -> void:
 	if Input.is_action_just_pressed("Dash") and energy >= 1:
 		dashingTime = DASH_LENGHT
 		energy -= 1
 		PlrMovement = EnumPlrMovement.DASH
+
+func DetDashJump() -> void:
+	if CurentPlayersState == EnumPlayerStates.GROUND and Input.is_action_just_pressed("Jump") and energy >= 1:
+		energy -= 2
+		PlrMovement = EnumPlrMovement.AIRBORNE
+		velocity = Vector2(DASH_SPEED * lastDirection * 2, -JUMP_HEIGHT)
+		$Slide2.emitting = false
+		PlrMovement = EnumPlrMovement.AIRBORNE
+		dashingTime = 0
 
 func CoyoteWall() -> void:
 	wallCoyoti = WALL_COYOTE
@@ -122,14 +148,56 @@ func DetCoyoteWall(delta) -> void:
 	if wallCoyoti > 0:
 		DetWallJump()
 		wallCoyoti -= delta/10
-	
 
 func GetWallDir() -> void:
 	wallNormal = get_wall_normal()
 
+func GroundSlam(delta) -> void:
+	groundslamDistance += delta / 10.0
+	velocity = Vector2(0,GROUNDSLAM_SPEED)
+	$Slide2.emitting = true
+	$Slide2.process_material.emission_shape_offset = Vector3(0,5,0)
+	$Slide2.process_material.direction = Vector3(0,-5,0)
+
+func GroundSlamRecoveryStart() -> void:
+	groundslamRecoveryTime = GROUNDSLAM_RECOVERY
+
+func GroundSlamRecovery(delta) -> void:
+	groundslamRecoveryTime -= delta / 10.0
+	DetGroundSlamJump()
+	if groundslamRecoveryTime <= 0:
+		groundslamRecoveryTime = 0
+		PlrMovement = EnumPlrMovement.GROUNDED
+
+func DetGroundSlamJump() -> void:
+	if Input.is_action_just_pressed("Jump"):
+		velocity.y = -min(groundslamDistance, GROUNDSLAM_DISTANCE) * JUMP_HEIGHT * GROUNDSLAM_SPEED/100 - 100
+		groundslamRecoveryTime = 0
+		PlrMovement = EnumPlrMovement.AIRBORNE
+
+func DetSlide() -> void:
+	if Input.is_action_just_pressed("Slide"):
+		velocity.x = max(velocity.x - SLIDE_SPEED, 0)
+		PlrMovement = EnumPlrMovement.SLIDE
+
+func DetRecoverySlide() -> void:
+	if Input.is_action_just_pressed("Slide"):
+		PlrMovement = EnumPlrMovement.SLIDE
+		velocity.x = max(lastDirection * min(groundslamDistance, GROUNDSLAM_DISTANCE) * GROUNDSLAM_SPEED * 10 - SLIDE_SPEED,0)
+
+func Slide() -> void:
+	print((abs(velocity.x) - SLIDE_SPEED))
+	velocity.x = ((abs(velocity.x) - SLIDE_SPEED) * 0.9 + SLIDE_SPEED) * lastDirection
+	$Slide.emitting = true
+	$Slide.process_material.emission_shape_offset = Vector3(0,5,0)
+	$Slide.process_material.direction = Vector3(-lastDirection,-1,0)
+	if velocity.x == 0:
+		PlrMovement = EnumPlrMovement.GROUNDED
+	if Input.is_action_just_released("Slide"):
+		PlrMovement = EnumPlrMovement.GROUNDED
+
 func get_input(delta) -> void:
 	delta *= 10
-	velocity *= DAMPENING
 
 	if energy < 3:
 		energy += delta / 10 * 0.7
@@ -156,6 +224,14 @@ func get_input(delta) -> void:
 		CurentPlayersState = EnumPlayerStates.WALL
 	else:
 		CurentPlayersState = EnumPlayerStates.AIR
+
+	if CurentPlayersState == EnumPlayerStates.GROUND:
+		velocity *= DAMPENING
+	elif PlrMovement == EnumPlrMovement.SLIDE:
+		velocity.y *= DAMPENING.y
+	else:
+		velocity.x = velocity.x * DAMPENING.x / 2 + velocity.x /2
+		velocity.y *= DAMPENING.y
 
 	if PlrMovement == EnumPlrMovement.GROUNDED:
 		ResetWallJumps()
@@ -188,65 +264,84 @@ func get_input(delta) -> void:
 			DisableWallGrav()
 			PlrMovement = EnumPlrMovement.GROUNDED
 
-	print(EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement))
+	if prevPrint !=EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement):
+		prevPrint = EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement)
+		print(prevPrint)
 
 	if PlrMovement == EnumPlrMovement.GROUNDED:
 		Movement(delta)
 		DetJump()
+		DetSlide()
 
 	if PlrMovement == EnumPlrMovement.AIRBORNE:
 		DetCoyoteWall(delta)
 		Movement(delta)
 		Gravity(delta)
-			
+		DetGroundslam()
+
 	if PlrMovement == EnumPlrMovement.WALL_HUG:
 		Movement(delta)
 		Gravity(delta)
 		DetWallJump()
+		DetGroundslam()
 
 	if PlrMovement == EnumPlrMovement.WALL_SLIDE:
 		Movement(delta)
 		WallGrav(delta)
 		DetWallJump()
+		DetGroundslam()
 
 	if PlrMovement != EnumPlrMovement.DASH:
 		DetDash()
 
 	if PlrMovement == EnumPlrMovement.DASH:
 		Dashing(delta)
+		DetDashJump()
 
+	if PlrMovement == EnumPlrMovement.GROUND_SLAM:
+		GroundSlam(delta)
+		if CurentPlayersState == EnumPlayerStates.WALL:
+			DetWallJump()
+		if CurentPlayersState == EnumPlayerStates.GROUND:
+			PlrMovement = EnumPlrMovement.GROUND_SLAM_RECOVERY
+			GroundSlamRecoveryStart()
+	
+	if PlrMovement == EnumPlrMovement.GROUND_SLAM_RECOVERY:
+		$Slide2.emitting = false
+		Movement(delta)
+		GroundSlamRecovery(delta)
+		DetRecoverySlide()
+	
+	if PlrMovement == EnumPlrMovement.JUMP_STORAGE:
+		Movement(delta)
+		groundslamDistance = GROUNDSLAM_DISTANCE
+		if CurentPlayersState == EnumPlayerStates.WALL:
+			DetWallJump()
+			if velocity.y > 0:
+				WallGrav(delta)
+			else: 
+				Gravity(delta)
+		else:
+			$Slide.emitting = false
+			Gravity(delta)
+		if CurentPlayersState == EnumPlayerStates.GROUND:
+			groundslamRecoveryTime = GROUNDSLAM_RECOVERY
+			PlrMovement = EnumPlrMovement.GROUND_SLAM_RECOVERY
+
+	if PlrMovement == EnumPlrMovement.SLIDE:
+		scale = Vector2(1,0.5)
+		Slide()
+		Gravity(delta)
+	else:
+		scale = Vector2(1,1)
 
 	if true:
 		return
-	
-	if is_on_floor():
-		Airborne = false
-	else:
-		Airborne = true
-	
-	if is_on_wall():
-		OnWall = true
-	else:
-		OnWall = false
 
-	if Airborne:
-		if not GroundSlam and Input.is_action_just_pressed("Slide"):
-			groundDistance = 0
-			velocity.x = 0
-			JumpStorage = false
-			GroundSlam = true
-			$Slide2.emitting = true
-			groundDistance = 0
+	if Input.is_action_pressed("Slide"):
+		Sliding = true
 	else:
-		if GroundSlam:
-			timeSinceLastGroundpund = Time.get_ticks_msec()
-			$Slide2.emitting = false
-			GroundSlam = false
-			JumpStorage = false
-		if Input.is_action_pressed("Slide"):
-			Sliding = true
-		else:
-			Sliding = false
+		Sliding = false
 
 	if Sliding:
 		if Airborne:
@@ -268,7 +363,7 @@ func get_input(delta) -> void:
 	
 	if GroundSlam:
 		if Dashing:
-			GroundSlam = false
+			# GroundSlam = false
 			JumpStorage = false
 			groundDistance = 0
 
@@ -288,7 +383,7 @@ func get_input(delta) -> void:
 	if GroundSlam:
 		if not JumpStorage:
 			CanMove = false
-			velocity.y = GROUNDPOUND_SPEED
+			velocity.y = GROUNDSLAM_SPEED
 		if JumpStorage:
 			groundDistance = 4
 		else:
@@ -306,13 +401,13 @@ func get_input(delta) -> void:
 			if velocity.y > 0:
 				#GroundSlam for wall going down
 				if GroundSlam and not JumpStorage:
-					velocity.y = GROUNDPOUND_SPEED
+					velocity.y = GROUNDSLAM_SPEED
 			else:
 				#wall GRAVITY if player moving up the wall
 				$Slide.emitting = false
 				#GroundSlam
 				if GroundSlam and not JumpStorage:
-					velocity.y = GROUNDPOUND_SPEED
+					velocity.y = GROUNDSLAM_SPEED
 	#Dashing
 
 func _physics_process(delta):
