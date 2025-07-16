@@ -34,6 +34,36 @@ shape = SubResource("SegmentShape2D_6kyh4")
 
 [node name="Bottom" type="AnimatableBody2D" parent="."]
 
+[node name="Control" type="Control" parent="Bottom"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Dash1" type="ColorRect" parent="Bottom/Control"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
+[node name="Dash2" type="ColorRect" parent="Bottom/Control"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 10.0
+offset_right = 92.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
+[node name="Dash3" type="ColorRect" parent="Bottom/Control"]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 10.0
+offset_right = 134.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
 [node name="CS" type="CollisionShape2D" parent="Bottom"]
 shape = SubResource("SegmentShape2D_ssx45")
 

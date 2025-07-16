@@ -60,9 +60,12 @@ grow_vertical = 2
 pivot_offset = Vector2(0.5, 0.5)
 color = Color(0, 0, 0, 0.392157)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_yp62b")]
+[node name="CharacterBody2D" parent="." node_paths=PackedStringArray("StageGui") instance=ExtResource("2_yp62b")]
 position = Vector2(0, 50)
+StageGui = NodePath("../Cage/Bottom/Control")
 
 [node name="Cage" parent="." instance=ExtResource("3_yp62b")]
-CagePosition = Vector2(0, 50)
+CagePosition = Vector2(0, 30)
 CageSize = Vector2(480, 240)
+
+[editable path="Cage"]
