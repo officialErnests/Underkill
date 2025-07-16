@@ -2,7 +2,7 @@
 ## Undertale x ultrakill
 It's an unedrtale un ultrakill mashup
 > Whole project was writen by human, 0 ai so bugs to be expected XD
-#Play in browser -> https://n0o0b090lv.itch.io/underkill
+# Play in browser -> https://n0o0b090lv.itch.io/underkill
 # What did i learn?
 *How to setup godot with github and vscode
 *Godots enum variables
