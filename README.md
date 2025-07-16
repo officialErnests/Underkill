@@ -1,13 +1,14 @@
 # Underkill
 ## Undertale x ultrakill
 It's an unedrtale un ultrakill mashup
-> Whole project was writen by human, 0 ai so bugs to be expected XD
+> Whole project was writen by human, 0 ai since i like pain raw B) so bugs to be expected XD
 # Play in browser -> https://n0o0b090lv.itch.io/underkill
 # What did i learn?
 - How to setup godot with github and vscode
 - Godots enum variables
 - How to work with enum types
 - Some shader scripting in godot
+- Best programming practices around enum (honestly its funny how i didn't use these XD)
 
 # Updates
 ## Day 1
@@ -31,7 +32,7 @@ More movement :D
 > - groundslam - when in air ctrl and you start to fast fall and can't move, but after landing you can jump again to get to same hights or slide in biger speeds
 > - jumpstorage - funny ultrakilltech where if you groundslam the walljump you get full groundslam
 > - sliding - ctrl hitbox gets smaller and you slide along in one direction (Litraly still figuring this out with velocity n stuff as thunderstorm is coming so can't work on it D: )
-### [UPDATED ITCH] Fixed Slide and weird slides particle effects
+### [UPDATED ITCH] Fixed Slide and weird slides particle effects ~1h 5m -6h  15m
 Thats it player has basic movement and now i'm ready to create healt system enemies then guns and some music. Now clocking out of second day after creating this devlog B)
 > - sliding - ctrl (fully functional)
 > - slide jump - jump when sliding
