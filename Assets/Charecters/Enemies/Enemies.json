@@ -2,15 +2,18 @@
     "Filfth" : {
         "Health" : 0.5,
         "Damage" : 1.5,
-        "Sprite" : null,
+        "Body" : "Filfth",
+        "Width" : 50,
         "Intro" : [
-            "|| jumps in!"
+            ["Filfth jumps in!"],
+            ["Filfth TRIES TO BITE YOUR TOES",
+            "Also said \"GRRRRRrrr....\""]
         ],
         "Interactions" : {
             "Check" : [
-                "|| - ATK ||Damage HP ||Health",
+                "Filfth - ATK 1.5 HP 0.5",
                 "Seems hungry, hungry boi",
-                "|| - \"RAGHhhh...\""
+                "Filfth - \"RAGHhhh...\""
             ]
         }
     }

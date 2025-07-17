@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnnq3xult5jwp"
-path="res://.godot/imported/Style.png-6a232dfdb18b4dc595b7b308665b94c2.ctex"
+uid="uid://cqyiwwydwx2bw"
+path="res://.godot/imported/Filfth_Body.png-4c54129e7c30c32f03305cc9d922dd91.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Charecters/Player/Style.png"
-dest_files=["res://.godot/imported/Style.png-6a232dfdb18b4dc595b7b308665b94c2.ctex"]
+source_file="res://Assets/Charecters/Enemies/Filfth_Body.png"
+dest_files=["res://.godot/imported/Filfth_Body.png-4c54129e7c30c32f03305cc9d922dd91.ctex"]
 
 [params]
 

@@ -9,7 +9,6 @@ It's an unedrtale un ultrakill mashup
 - How to work with enum types
 - Some shader scripting in godot
 - Json and it quirks
-=======
 - Best programming practices around enum (honestly its funny how i didn't use these XD)
 
 # Updates
@@ -48,3 +47,14 @@ Player stuck in menue since haven't done fully the switch XD
 > - Added some pixel art buttons
 > - Made player switch from attack mode to dodge mode and so on
 > - Now you can move left and right in diologue and select with w and s
+## -- YSWS --
+Joined YSWS programm (Jumpstart) soo i have 20 hrs top go :)
+> at 8h 28m so have to subtract that from YSWS time :<
+### Fight Update ~3h 2m - 11h 17m
+Still working on main script, added turns(somewhat) and made cage more animated, now you can spawn inf enemies and they are auto placed :D
+> - Filfth sprites :D
+> - Cool cage
+> - Soul movement in menu
+> - made cool transition between your turn and enemies
+> - menu selection O: (just move in menu nothing mutch)
+> - Menu TEXT XD

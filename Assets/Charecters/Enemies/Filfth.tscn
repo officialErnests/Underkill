@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5d4fn0wxn6dv"]
+
+[ext_resource type="Texture2D" uid="uid://3jfeapdc5d4o" path="res://Assets/Charecters/Enemies/Filfth_Head.png" id="1_ac6wb"]
+[ext_resource type="Texture2D" uid="uid://cqyiwwydwx2bw" path="res://Assets/Charecters/Enemies/Filfth_Body.png" id="2_2lhpe"]
+
+[node name="Enemy_Preset" type="Node2D"]
+z_index = -2
+
+[node name="Head" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(2, -101)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_ac6wb")
+
+[node name="Body" type="Sprite2D" parent="."]
+z_index = -1
+texture_filter = 1
+position = Vector2(1, -48)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("2_2lhpe")

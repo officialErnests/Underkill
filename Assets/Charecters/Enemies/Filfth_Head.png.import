@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ban6gioa6b7ei"
-path="res://.godot/imported/NOMERCY.png-51f99ca333921ed844f494df8a7bb6fc.ctex"
+uid="uid://3jfeapdc5d4o"
+path="res://.godot/imported/Filfth_Head.png-4d0a1029944a5c02203c93f42cd169cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Charecters/Player/NOMERCY.png"
-dest_files=["res://.godot/imported/NOMERCY.png-51f99ca333921ed844f494df8a7bb6fc.ctex"]
+source_file="res://Assets/Charecters/Enemies/Filfth_Head.png"
+dest_files=["res://.godot/imported/Filfth_Head.png-4d0a1029944a5c02203c93f42cd169cd.ctex"]
 
 [params]
 
