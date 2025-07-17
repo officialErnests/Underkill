@@ -8,11 +8,9 @@ It's an unedrtale un ultrakill mashup
 - Godots enum variables
 - How to work with enum types
 - Some shader scripting in godot
-<<<<<<< HEAD
 - Json and it quirks
 =======
 - Best programming practices around enum (honestly its funny how i didn't use these XD)
->>>>>>> 5cf9f55b8edc81e8179241115c81661201a03ca0
 
 # Updates
 ## Day 1
