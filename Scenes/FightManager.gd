@@ -44,7 +44,7 @@ func _ready() -> void:
 	label = $Camera2D/Text
 	player = $CharacterBody2D
 
-	label.Text = ""
+	# label.Text = ""
 
 	cage.CagePosition = DEFAULT_CAGE[0]
 	cage.CageSize = DEFAULT_CAGE[1]

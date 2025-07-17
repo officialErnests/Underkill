@@ -111,6 +111,7 @@ offset_right = 10.0
 offset_bottom = 10.0
 
 [node name="Kill" type="TextureRect" parent="Camera2D/Control/Control2"]
+self_modulate = Color(1, 0, 0, 1)
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -119,6 +120,7 @@ texture = ExtResource("3_cxacv")
 stretch_mode = 2
 
 [node name="Bep" type="TextureRect" parent="Camera2D/Control/Control2"]
+self_modulate = Color(1, 0, 0.0166664, 1)
 texture_filter = 1
 layout_mode = 0
 offset_left = 68.0
@@ -160,6 +162,6 @@ StageGui = NodePath("../Camera2D/Control")
 
 [node name="Cage" parent="." instance=ExtResource("3_yp62b")]
 CagePosition = Vector2(0, 70)
-CageSize = Vector2(287, 140)
+CageSize = Vector2(0, 0)
 
 [editable path="Cage"]

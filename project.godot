@@ -26,6 +26,10 @@ window/stretch/mode="viewport"
 movie_writer/movie_file="C:/Users/n0o0b/OneDrive/Desktop/the good stuf plz dont open/godot/underkill/FunnyVids/Shaders.avi"
 movie_writer/fps=30
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
+
 [input]
 
 Up={
