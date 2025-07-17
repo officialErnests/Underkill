@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+
 var walljumps = 3
 
 #player variables
@@ -27,6 +28,8 @@ var JumpStorage = false
 var Invincible = false
 
 @export var StageGui: Control
+@export var PlayerDoge: bool
+@export var MenuPos: Vector2
 
 #betterStates
 enum EnumPlayerStates {AIR,GROUND,WALL}
@@ -199,20 +202,20 @@ func get_input(delta) -> void:
 
 	if energy < 3:
 		energy += delta / 10 * 0.7
-		StageGui.get_node("Dash3").color = Color(0.2,max(energy-2,0.4)/2,max(energy-2,0.4)/2)
+		StageGui.get_node("Control").get_node("Dash3").color = Color(0.2,max(energy-2,0.4)/2,max(energy-2,0.4)/2)
 		if energy < 2:
-			StageGui.get_node("Dash2").color = Color(0.2,max(energy-1,0.4)/2,max(energy-1,0.4)/2)
+			StageGui.get_node("Control").get_node("Dash2").color = Color(0.2,max(energy-1,0.4)/2,max(energy-1,0.4)/2)
 		else:
-			StageGui.get_node("Dash2").color = Color(0,1,1)
+			StageGui.get_node("Control").get_node("Dash2").color = Color(0,1,1)
 		if energy < 1:
-			StageGui.get_node("Dash1").color = Color(0.2,max(energy-0,0.4)/2,max(energy-0,0.4)/2)
+			StageGui.get_node("Control").get_node("Dash1").color = Color(0.2,max(energy-0,0.4)/2,max(energy-0,0.4)/2)
 		else:
-			StageGui.get_node("Dash1").color = Color(0,1,1)
+			StageGui.get_node("Control").get_node("Dash1").color = Color(0,1,1)
 	else:
 		energy = 3
-		StageGui.get_node("Dash1").color = Color(0,1,1)
-		StageGui.get_node("Dash2").color = Color(0,1,1)
-		StageGui.get_node("Dash3").color = Color(0,1,1)
+		StageGui.get_node("Control").get_node("Dash1").color = Color(0,1,1)
+		StageGui.get_node("Control").get_node("Dash2").color = Color(0,1,1)
+		StageGui.get_node("Control").get_node("Dash3").color = Color(0,1,1)
 
 
 	if is_on_floor():
@@ -336,81 +339,14 @@ func get_input(delta) -> void:
 	else:
 		$Slide.emitting = false
 
-	if true:
-		return
-
-	if Input.is_action_pressed("Slide"):
-		Sliding = true
-	else:
-		Sliding = false
-
-	if Sliding:
-		if Airborne:
-			$Slide.emitting = true
-			CanMove = false
-			$CollisionPolygon2D.scale.y = 1
-		else:
-			$Slide.emitting = true
-			CanMove = false
-			$CollisionPolygon2D.scale.y = 1
-	
-
-	if Dashing:
-		if dashingTime > 0:
-			dashingTime -= delta/10
-			$CollisionPolygon2D.scale.y = 1
-			velocity = Vector2(DASH_SPEED * lastDirection,0)
-			Invincible = true
-	
-	if GroundSlam:
-		if Dashing:
-			# GroundSlam = false
-			JumpStorage = false
-			groundDistance = 0
-
-	if Airborne:
-		pass
-	else:
-		wallSlideSpeed = 0.1
-		$Slide.emitting = false
-		walljumps = 3
-		
-		if Input.is_action_just_pressed("Jump"):
-			velocity.y = -JUMP_HEIGHT
-			#JumpStorage
-			if Time.get_ticks_msec() - timeSinceLastGroundpund < 200:
-				velocity.y -= groundDistance * 100
-
-	if GroundSlam:
-		if not JumpStorage:
-			CanMove = false
-			velocity.y = GROUNDSLAM_SPEED
-		if JumpStorage:
-			groundDistance = 4
-		else:
-			groundDistance += delta
-			groundDistance = min(groundDistance, 4)
-
-	#wallthingies
-	if OnWall and Airborne:
-		#walljump
-			#JumpStorage
-		if GroundSlam:
-			JumpStorage = true
-		else:
-			#when going down a wall
-			if velocity.y > 0:
-				#GroundSlam for wall going down
-				if GroundSlam and not JumpStorage:
-					velocity.y = GROUNDSLAM_SPEED
-			else:
-				#wall GRAVITY if player moving up the wall
-				$Slide.emitting = false
-				#GroundSlam
-				if GroundSlam and not JumpStorage:
-					velocity.y = GROUNDSLAM_SPEED
-	#Dashing
-
 func _physics_process(delta):
-	get_input(delta)
-	move_and_slide()
+	if PlayerDoge:
+		get_input(delta)
+		move_and_slide()
+	else:
+		PlrMovement = EnumPlrMovement.AIRBORNE
+		CurentPlayersState = EnumPlayerStates.AIR
+		$Slide.emitting = false
+		$Slide2.emitting = false
+		scale = Vector2(1,1)
+		position = MenuPos

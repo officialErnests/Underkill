@@ -6,6 +6,12 @@ var screenSize = DisplayServer.screen_get_size()
 const lineSize = 1
 
 func _ready() -> void:
+	SizeChange()
+
+func _process(_delta: float) -> void:
+	SizeChange()
+
+func SizeChange() -> void:
 	$Line2D.points[0] = Vector2(CagePosition.x - CageSize.x/2 - lineSize, CagePosition.y - CageSize.y/2 - lineSize)
 	$Line2D.points[1] = Vector2(CagePosition.x + CageSize.x/2 + lineSize, CagePosition.y - CageSize.y/2 - lineSize)
 	$Line2D.points[2] = Vector2(CagePosition.x + CageSize.x/2 + lineSize, CagePosition.y + CageSize.y/2 + lineSize)
@@ -18,6 +24,3 @@ func _ready() -> void:
 	$Left/CS.shape.b = Vector2(0, CageSize.y)
 	$Top/CS.shape.b = Vector2(CageSize.x, 0)
 	$Bottom/CS.shape.b = Vector2(CageSize.x, 0)
-	#$Line2D.points[1] = $Left.position
-	#$Line2D.points[2] = $Top.position
-	#$Line2D.points[3] = $Bottom.position

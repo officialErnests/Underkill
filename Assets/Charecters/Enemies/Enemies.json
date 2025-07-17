@@ -1,0 +1,17 @@
+{
+    "Filfth" : {
+        "Health" : 0.5,
+        "Damage" : 1.5,
+        "Sprite" : null,
+        "Intro" : [
+            "|| jumps in!"
+        ],
+        "Interactions" : {
+            "Check" : [
+                "|| - ATK ||Damage HP ||Health",
+                "Seems hungry, hungry boi",
+                "|| - \"RAGHhhh...\""
+            ]
+        }
+    }
+}

@@ -8,6 +8,7 @@ It's an unedrtale un ultrakill mashup
 - Godots enum variables
 - How to work with enum types
 - Some shader scripting in godot
+- Json and it quirks
 
 # Updates
 ## Day 1
@@ -37,3 +38,11 @@ Thats it player has basic movement and now i'm ready to create healt system enem
 > - slide jump - jump when sliding
 > - groundslide - after groundslam slide it gives you alot of speed
 > - fixed particles - befrore this sometimes they bugged and didn't turn off XD
+## Day 3
+### Stage ~ 2h - 8h 15m
+Added turn order, aswell learned json in order to make enemies esier later.
+Aswell more pixelart (i suck at it but ey it's works for now :D)
+Player stuck in menue since haven't done fully the switch XD
+> - Added some pixel art buttons
+> - Made player switch from attack mode to dodge mode and so on
+> - Now you can move left and right in diologue and select with w and s

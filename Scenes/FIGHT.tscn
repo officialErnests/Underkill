@@ -1,13 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://duumy4wts4l7d"]
+[gd_scene load_steps=11 format=3 uid="uid://duumy4wts4l7d"]
 
+[ext_resource type="Script" uid="uid://ciibd7fewfxj6" path="res://Scenes/FightManager.gd" id="1_25nby"]
 [ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="2_ksuxo"]
 [ext_resource type="PackedScene" uid="uid://hh88t1tvx72q" path="res://Assets/Charecters/Player/Player.tscn" id="2_yp62b"]
+[ext_resource type="Texture2D" uid="uid://dlsx4nye2kxik" path="res://Assets/Charecters/Player/KILL.png" id="3_cxacv"]
 [ext_resource type="PackedScene" uid="uid://dgx6315w71rys" path="res://Assets/Cages/cage.tscn" id="3_yp62b"]
+[ext_resource type="Texture2D" uid="uid://dxtvh54vkcc0f" path="res://Assets/Charecters/Player/Bep.png" id="4_koqdt"]
+[ext_resource type="Texture2D" uid="uid://dnnq3xult5jwp" path="res://Assets/Charecters/Player/Style.png" id="5_8ri3v"]
+[ext_resource type="Texture2D" uid="uid://ban6gioa6b7ei" path="res://Assets/Charecters/Player/NOMERCY.png" id="6_3gfpi"]
+[ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="7_koqdt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ksuxo"]
 shader = ExtResource("2_ksuxo")
 
 [node name="Fight" type="Node2D"]
+script = ExtResource("1_25nby")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -60,12 +67,99 @@ grow_vertical = 2
 pivot_offset = Vector2(0.5, 0.5)
 color = Color(0, 0, 0, 0.392157)
 
+[node name="Control" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Control" type="Control" parent="Camera2D/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+
+[node name="Dash1" type="ColorRect" parent="Camera2D/Control/Control"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
+[node name="Dash2" type="ColorRect" parent="Camera2D/Control/Control"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 10.0
+offset_right = 92.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
+[node name="Dash3" type="ColorRect" parent="Camera2D/Control/Control"]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 10.0
+offset_right = 134.0
+offset_bottom = 20.0
+color = Color(0, 1, 1, 1)
+
+[node name="Control2" type="Control" parent="Camera2D/Control"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 10.0
+offset_bottom = 10.0
+
+[node name="Kill" type="TextureRect" parent="Camera2D/Control/Control2"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_cxacv")
+stretch_mode = 2
+
+[node name="Bep" type="TextureRect" parent="Camera2D/Control/Control2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 68.0
+offset_right = 131.0
+offset_bottom = 40.0
+texture = ExtResource("4_koqdt")
+stretch_mode = 2
+
+[node name="Style" type="TextureRect" parent="Camera2D/Control/Control2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 136.0
+offset_right = 199.0
+offset_bottom = 40.0
+texture = ExtResource("5_8ri3v")
+stretch_mode = 2
+
+[node name="Nomercy" type="TextureRect" parent="Camera2D/Control/Control2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 204.0
+offset_right = 267.0
+offset_bottom = 40.0
+texture = ExtResource("6_3gfpi")
+stretch_mode = 2
+
+[node name="Text" type="Label" parent="Camera2D"]
+texture_filter = 1
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/font = ExtResource("7_koqdt")
+text = "* YOOO
+* How its going
+*"
+
 [node name="CharacterBody2D" parent="." node_paths=PackedStringArray("StageGui") instance=ExtResource("2_yp62b")]
 position = Vector2(0, 50)
-StageGui = NodePath("../Cage/Bottom/Control")
+StageGui = NodePath("../Camera2D/Control")
 
 [node name="Cage" parent="." instance=ExtResource("3_yp62b")]
-CagePosition = Vector2(0, 30)
-CageSize = Vector2(500, 240)
+CagePosition = Vector2(0, 70)
+CageSize = Vector2(287, 140)
 
 [editable path="Cage"]
