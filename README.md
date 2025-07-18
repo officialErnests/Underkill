@@ -58,3 +58,9 @@ Still working on main script, added turns(somewhat) and made cage more animated,
 > - made cool transition between your turn and enemies
 > - menu selection O: (just move in menu nothing mutch)
 > - Menu TEXT XD
+## Day 4
+### Menu ~2h 11m - 13h 28m
+I got so menu actualy works and brings you to battle altho there is nothing to doge and menu dosn't do anything... still happy bout it since i also unspagetify the code a bit :D So now taking break and later will implament menu json fully, then will make you able to attack enemies and after that will make enemies attack you (IMO this is straight up FIRE :firex2:)
+> - menu travelsar (basics [just there for my own use])
+> - Enemies bob their heads now
+> - Easy enemy json aswell menu json

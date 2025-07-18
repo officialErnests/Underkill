@@ -5,6 +5,9 @@ var enemi_folder_path = "res://Assets//Charecters//Enemies//"
 var enemies_json: Dictionary = {}
 var enemySpawnNode
 
+var players_json_path = "res://Assets//Charecters//Player//diologue.json"
+var players_json: Dictionary = {}
+
 var mainControl : Control
 var label : Label
 var cage : Node2D
@@ -12,20 +15,26 @@ var player : CharacterBody2D
 
 var disableNoMercy = false
 var StageSet = StageSets.PLAYER_MENU
-var LockedIn = false
-
+var optionSize = 0
+var time = 0
 
 enum StageSets {
 	ENEMY_ATTACK,
 	PLAYER_ATTACK,
 	PLAYER_MENU,
-	ADVANCED_OPTIONS
+	ADVANCED_OPTIONS,
+	OPTION_TEXT
 }
 enum PlayerPos {
 	Kill,
 	Bep,
 	SSStyle,
 	Nomercy
+}
+enum GuiStages {
+	OPTIONS,
+	TEXT,
+	BATTLE
 }
 
 var CageSizes = {
@@ -41,17 +50,23 @@ var CageSizes = {
 	]
 }
 
-var OFFSETS = {
-	"Kill" = Vector2(63,20),
-	"Bep" = Vector2(132,20),
-	"SSStyle" = Vector2(200,20),
-	"NOMERCY" = Vector2(224,20)
-}
+var OFFSETS = [
+	Vector2(63,20),
+	Vector2(132,20),
+	Vector2(200,20),
+	Vector2(224,20)
+]
 
 var ADVANCED_OFFSET = Vector2(5,5)
 var advOptions = 0
 
 var attackEnemies = [
+	"Filfth",
+	"Filfth",
+	"Filfth",
+	"Filfth",
+	"Filfth",
+	"Filfth",
 	"Filfth",
 	"Filfth",
 	"Filfth"
@@ -64,6 +79,7 @@ var StageChanged = true
 var enemyAttack = 0
 var ENEMY_ATTACK_TIME = 10
 var PlayerSel = PlayerPos.Kill
+
 
 func _ready() -> void:
 	UnJsonify()
@@ -79,6 +95,7 @@ func _ready() -> void:
 
 
 	var totalWidth = 0
+	var offseter = 0
 	for enemy in attackEnemies:
 		if enemies_json[enemy]:
 			var TempEnemy = {
@@ -88,8 +105,10 @@ func _ready() -> void:
 				"Body" = load(enemi_folder_path + enemies_json[enemy]["Body"] + ".tscn").instantiate(),
 				"Width" = enemies_json[enemy]["Width"],
 				"Intro" = enemies_json[enemy]["Intro"],
-				"Interactions" = enemies_json[enemy]["Interactions"]
+				"Interactions" = enemies_json[enemy]["Interactions"],
+				"Offset" = offseter
 			}
+			offseter += 0.3
 			enemySpawnNode.add_child(TempEnemy["Body"])
 			TempEnemy["Body"].position = Vector2(0,0)
 			totalWidth += TempEnemy["Width"]/2
@@ -101,105 +120,63 @@ func _ready() -> void:
 
 			
 
-func UnJsonify() -> Dictionary: 
+func UnJsonify() -> void: 
 	var file = FileAccess.open(enemies_json_path, FileAccess.READ)
 	var json = file.get_as_text()
 	var jsonObj = JSON.new()
 	jsonObj.parse(json)
 	enemies_json = jsonObj.data
-	return enemies_json
+
+	var file2 = FileAccess.open(players_json_path, FileAccess.READ)
+	var json2 = file2.get_as_text()
+	var jsonObj2 = JSON.new()
+	jsonObj2.parse(json2)
+	players_json = jsonObj2.data
 
 func get_input(_delta) -> void:
 	if StageSet == StageSets.PLAYER_ATTACK:#Litraly has to be before "if StageSet == StageSets.PLAYER_MENU:" or shit breaks XD
-		if not StageChanged:
-			if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
+		InputPlayerAttack()
+	if StageSet == StageSets.PLAYER_MENU:
+		InputPlayerMenu()
+	if StageSet == StageSets.ADVANCED_OPTIONS:
+		InputAdvancedOptions()
+	if StageSet == StageSets.OPTION_TEXT:
+		InputOptionText()
+
+func InputPlayerAttack() -> void:
+	if not StageChanged: #debounces jump input
+		if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
 				StageSet = StageSets.ENEMY_ATTACK
 				enemyIntro = ENEMY_INTRO
 				StageChanged = true
-		else:
-			StageChanged = false
-	if StageSet == StageSets.PLAYER_MENU:
-		if not LockedIn:
-			match PlayerSel:
-				PlayerPos.Kill:
-					player.MenuPos = mainControl.position + OFFSETS["Kill"]
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
-					if Input.is_action_just_pressed("Left"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						if disableNoMercy:
-							PlayerSel = 2 as PlayerPos
-						else:
-							PlayerSel = 3 as PlayerPos
-					if Input.is_action_just_pressed("Right"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel + 1 as PlayerPos
-				PlayerPos.Bep:
-					player.MenuPos = mainControl.position + OFFSETS["Bep"]
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
-					if Input.is_action_just_pressed("Left"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel - 1 as PlayerPos
-					if Input.is_action_just_pressed("Right"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel + 1 as PlayerPos
-				PlayerPos.SSStyle:
-					player.MenuPos = mainControl.position + OFFSETS["SSStyle"]
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
-					if Input.is_action_just_pressed("Left"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel - 1 as PlayerPos
-					if Input.is_action_just_pressed("Right"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						if disableNoMercy:
-							PlayerSel = 0 as PlayerPos
-						else:
-							PlayerSel = PlayerSel + 1 as PlayerPos
-				PlayerPos.Nomercy:
-					player.MenuPos = mainControl.position + OFFSETS["NOMERCY"]
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
-					if Input.is_action_just_pressed("Left"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel - 1 as PlayerPos
-					if Input.is_action_just_pressed("Right"):
-						mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
-						PlayerSel = PlayerSel + 1 as PlayerPos
-				_:
-					PlayerSel = PlayerPos.Kill
-		if not LockedIn:
-			if Input.is_action_just_pressed("Up"):
-				LockedIn = true
-				player.MenuPos += Vector2(0,-10)
-				mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,0,1)
-				if PlayerSel == PlayerPos.Kill:
-					StageChanged = true
-					StageSet = StageSets.ADVANCED_OPTIONS
-				if PlayerSel == PlayerPos.Bep:
-					StageChanged = true
-					StageSet = StageSets.ADVANCED_OPTIONS
-				if PlayerSel == PlayerPos.SSStyle:
-					StageChanged = true
-					StageSet = StageSets.ADVANCED_OPTIONS
-				if PlayerSel == PlayerPos.Nomercy:
-					LockedIn = false
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(0.1,0.1,1.1)
-					disableNoMercy = true
-					PlayerSel = PlayerPos.Kill
-					StageChanged = true
-					StageSet = StageSets.ADVANCED_OPTIONS
-	if StageSet == StageSets.ADVANCED_OPTIONS:
-		match PlayerSel:
+	else:
+		StageChanged = false
+
+func InputPlayerMenu() -> void:
+	PlayerMenuMove()
+	if Input.is_action_just_pressed("Jump"):
+		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,0,1)
+		StageSet = StageSets.ADVANCED_OPTIONS
+		StageChanged = true
+		if PlayerSel == PlayerPos.Nomercy:
+			mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(0.1,0.1,1.1)
+			disableNoMercy = true
+			PlayerSel = PlayerPos.Nomercy
+
+func InputAdvancedOptions() -> void:
+	match PlayerSel:
 			PlayerPos.Kill:
+				optionSize = 3
+				if Input.is_action_just_pressed("Dash"):
+					StageSet = StageSets.PLAYER_MENU
+					StageChanged = true
 				if StageChanged:
 					StageChanged = false
 					DisplayDiologue(["Punch", "Kick", "Shoot"])
-				advOptions = min(max(advOptions,0),2)
-				if Input.is_action_just_pressed("Dash"):
-					StageSet = StageSets.PLAYER_MENU
-					LockedIn = false
-					StageChanged = true
-				if Input.is_action_just_pressed("Jump"):
-					StageSet = StageSets.PLAYER_ATTACK
-					StageChanged = true
+				else:
+					if Input.is_action_just_pressed("Jump"):
+						StageSet = StageSets.OPTION_TEXT
+						StageChanged = true
 			PlayerPos.Bep:
 				if StageChanged:
 					StageChanged = false
@@ -231,6 +208,45 @@ func get_input(_delta) -> void:
 				if Input.is_action_just_pressed("back"):
 					PlayerSel = PlayerPos.Kill
 
+func InputOptionText() -> void:
+	match PlayerSel:
+		PlayerPos.Kill:
+			if StageChanged:
+				optionSize = 1
+				DisplayDiologue(["AGHGHGH"])
+				StageChanged = false
+			else:
+				if Input.is_action_just_pressed("Jump"):
+					StageChanged = true
+					enemyIntro = ENEMY_INTRO
+					StageSet = StageSets.ENEMY_ATTACK
+		PlayerPos.Bep:
+			if Input.is_action_just_pressed("back"):
+				PlayerSel = PlayerPos.Kill
+			if StageChanged:
+				StageChanged = false
+				var namesOfEnemies = []
+				for enemie in allEnemies:
+					namesOfEnemies.append(enemie["Name"])
+				DisplayDiologue(namesOfEnemies)
+				optionSize = allEnemies.size()
+		PlayerPos.SSStyle:
+			optionSize = 2
+			if Input.is_action_just_pressed("back"):
+				PlayerSel = PlayerPos.Kill
+			if StageChanged:
+				StageChanged = false
+				DisplayDiologue(["Well...", "Game broke XD"])
+		PlayerPos.Nomercy:
+			optionSize = 2
+			if Input.is_action_just_pressed("back"):
+				PlayerSel = PlayerPos.Kill
+			if StageChanged:
+				StageChanged = false
+				DisplayDiologue(["Well...", "Game broke XD"])
+		_:
+			if Input.is_action_just_pressed("back"):
+				PlayerSel = PlayerPos.Kill
 
 func UpdateCage(delta, cageSet, speed) -> void:
 	cage.CagePosition += (CageSizes[cageSet][0] - cage.CagePosition) * delta * speed
@@ -252,51 +268,114 @@ func DisplayDiologue(diol) -> void:
 		finalStr += "* " + line + "\n"
 	label.text = finalStr
 
+func NavigateOptions() -> void:
+	if Input.is_action_just_pressed("Up"):
+		advOptions -= 1
+	if Input.is_action_just_pressed("Down"):
+		advOptions += 1
+	advOptions = (advOptions + optionSize)% optionSize
+	player.MenuPos = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5) + Vector2(3,8) + Vector2(0,19) * advOptions
+
+func UpdateEnemi(delta, color, size) -> void:
+	enemySpawnNode.scale += (size - enemySpawnNode.scale) * delta
+	enemySpawnNode.modulate += (color - enemySpawnNode.modulate) * delta
+	for enemy in allEnemies:
+		var offset = enemy["Offset"]
+		enemy["Body"].get_child(0).position = Vector2(cos(time*2+offset) * 3 + cos(time*2+offset) * 10, cos(time*3+offset) * 3 + sin(time+offset) * 10)
+		enemy["Body"].get_child(1).position = Vector2(cos(time*2+offset) * 10, sin(time+offset) * 10)
+
+func RecenterPlayer() -> void:
+	player.PlayerDoge = true
+	player.MenuPos = cage.CagePosition
+	player.position = cage.CagePosition
+
+func PlayerMenuMove() -> void:
+	player.MenuPos = mainControl.position + OFFSETS[PlayerSel as int]
+	mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
+	if Input.is_action_just_pressed("Left"):
+		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
+		PlayerSel = PlayerSel - 1 as PlayerPos
+		if PlayerSel < 0:
+			if disableNoMercy:
+				PlayerSel = 2 as PlayerPos
+			else:
+				PlayerSel = 3 as PlayerPos
+	if Input.is_action_just_pressed("Right"):
+		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
+		PlayerSel = PlayerSel + 1 as PlayerPos
+		if disableNoMercy and PlayerSel > 4:
+			PlayerSel = 0 as PlayerPos
+		elif not disableNoMercy and PlayerSel > 3:
+			PlayerSel = 0 as PlayerPos
+
+func SwitchGui(Battle) -> void:
+	match Battle:
+		GuiStages.OPTIONS:
+			mainControl.get_child(0).visible = false
+			mainControl.get_child(1).visible = true
+			label.visible = true
+		GuiStages.TEXT:
+			mainControl.get_child(0).visible = false
+			mainControl.get_child(1).visible = false
+			label.visible = true
+		GuiStages.BATTLE:
+			mainControl.get_child(0).visible = true
+			mainControl.get_child(1).visible = false
+			label.visible = false
+		_:
+			mainControl.get_child(0).visible = false
+			mainControl.get_child(1).visible = true
+			label.visible = true
+
+
 func _physics_process(delta):
-	if StageSet == StageSets.ADVANCED_OPTIONS:
-		get_input(delta)
-		UpdateCage(delta, "DEFAULT_CAGE", 2)
-		player.MenuPos = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5) + Vector2(3,8) + Vector2(0,19) * advOptions
-		if Input.is_action_just_pressed("Up"):
-			advOptions -= 1
-		if Input.is_action_just_pressed("Down"):
-			advOptions += 1
+	time += delta
+	
 	if StageSet == StageSets.PLAYER_MENU:
-		enemySpawnNode.scale += (Vector2(1,1) - enemySpawnNode.scale) * delta
-		enemySpawnNode.modulate += (Color(1,1,1) - enemySpawnNode.modulate) * delta
-		get_input(delta)
-		UpdateCage(delta, "DEFAULT_CAGE", 2)
-		mainControl.get_child(0).visible = false
-		mainControl.get_child(1).visible = true
-		player.PlayerDoge = false
-		label.visible = true
 		if StageChanged:
+			SwitchGui(GuiStages.OPTIONS)
 			DisplayDiologue(allEnemies.pick_random()["Intro"].pick_random())
 			StageChanged = false
-	if StageSet == StageSets.PLAYER_ATTACK:
+		get_input(delta)
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1,1))
+		UpdateCage(delta, "DEFAULT_CAGE", 2)
+		player.PlayerDoge = false
+	elif StageSet == StageSets.ADVANCED_OPTIONS:
+		if StageChanged:
+			StageChanged = false
+		get_input(delta)
+		UpdateCage(delta, "DEFAULT_CAGE", 2)
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1.1,1.1))
+		NavigateOptions()
+	elif StageSet == StageSets.OPTION_TEXT:
+		if StageChanged:
+			StageChanged = false
+		get_input(delta)
+		UpdateCage(delta, "DEFAULT_CAGE", 2)
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1.2,1.2))
+		NavigateOptions()
+	elif StageSet == StageSets.PLAYER_ATTACK:
+		if StageChanged:
+			StageChanged = false
 		player.MenuPos = Vector2(400,0)
 		get_input(delta)
 		UpdateCage(delta, "DIOLOGUE_CAGE", 2)
-		mainControl.get_child(1).visible = false
+		SwitchGui(GuiStages.TEXT)
 		DisplayDiologue(["You used railcanon","It missed","You realised your aim sucks"])
-	if StageSet == StageSets.ENEMY_ATTACK:
-		mainControl.get_child(0).visible = true
-		label.visible = false
-		enemySpawnNode.modulate += (Color(0.2,0.2,0.2) - enemySpawnNode.modulate) * delta
-		enemySpawnNode.scale += (Vector2(0.7,0.7) - enemySpawnNode.scale) * delta
-		if enemyIntro > 0:
-			enemyIntro -= delta
-			UpdateCage(delta, "CAGE_SMALL", 5)
+	elif StageSet == StageSets.ENEMY_ATTACK:
+		UpdateEnemi(delta, Color(0.2,0.2,0.2), Vector2(0.7,0.7))
+		if enemyIntro > 0 or StageChanged:
 			if StageChanged:
-				player.PlayerDoge = true
-				player.MenuPos = cage.CagePosition
-				player.position = cage.CagePosition
+				SwitchGui(GuiStages.BATTLE)
+				RecenterPlayer()
 				StageChanged = false
+			UpdateCage(delta, "CAGE_SMALL", 5)
+			enemyIntro -= delta
 		else:
-			enemyAttack += delta
-			SetCageSize("CAGE_SMALL")
 			if ENEMY_ATTACK_TIME < enemyAttack:
 				StageChanged = true
 				StageSet = StageSets.PLAYER_MENU
+			enemyAttack += delta
+			SetCageSize("CAGE_SMALL")
 
 			

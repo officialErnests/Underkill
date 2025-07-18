@@ -1,0 +1,50 @@
+{
+    "Equiped" : {
+        "Attacks" : [
+            "Punch"
+        ]
+    },
+    "Attacks" : {
+        "Punch" : {
+            "KILL" : {
+                "Damage" : 1,
+                "Recharge" : 0,
+                "Messages" : [
+                    ["You hit the enemy",
+                    "It seems the enemy was hurt"],
+                    ["I LIKE YA CUT G",
+                    "[Smack]",
+                    "AHHHHHHHHHHHHHHHHHHHHHHHHHHHH"]
+                ]
+            },
+            "SSSTYLE" : {
+                "Heal" : 100,
+                "Chance" : 1, 
+                "Succes" : {
+                    "Cooldown" : 5,
+                    "Messages" : [
+                        ["As you saw yellow spark",
+                        "You parried that"],
+                        ["+Parry"],
+                        ["i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it"]
+                    ]
+                },
+                "Fail" : {
+                    "Cooldown" : 3,
+                    "Messages" : [
+                        ["As you saw yellow spark",
+                        "You wimped and ducked"],
+                        ["As you saw them attack",
+                        "You forgot how to Parry"],
+                        ["You missed the parry",
+                        "I call dibs"]
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -6,13 +6,17 @@
 [node name="Enemy_Preset" type="Node2D"]
 z_index = -2
 
-[node name="Head" type="Sprite2D" parent="."]
+[node name="HeadAttach" type="Node2D" parent="."]
+
+[node name="Head" type="Sprite2D" parent="HeadAttach"]
 texture_filter = 1
 position = Vector2(2, -101)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("1_ac6wb")
 
-[node name="Body" type="Sprite2D" parent="."]
+[node name="BodyAttach" type="Node2D" parent="."]
+
+[node name="Body" type="Sprite2D" parent="BodyAttach"]
 z_index = -1
 texture_filter = 1
 position = Vector2(1, -48)
