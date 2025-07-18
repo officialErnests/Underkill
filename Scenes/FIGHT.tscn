@@ -19,7 +19,7 @@ script = ExtResource("1_25nby")
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="Camera2D"]
-z_index = -12
+z_index = -60
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -35,7 +35,7 @@ pivot_offset = Vector2(0.5, 0.5)
 color = Color(0, 0, 0.188235, 1)
 
 [node name="ColorRect2" type="ColorRect" parent="Camera2D"]
-z_index = -11
+z_index = -50
 material = SubResource("ShaderMaterial_ksuxo")
 anchors_preset = 8
 anchor_left = 0.5
@@ -52,7 +52,7 @@ pivot_offset = Vector2(0.5, 0.5)
 color = Color(0, 0, 0, 1)
 
 [node name="ColorRect3" type="ColorRect" parent="Camera2D"]
-z_index = -10
+z_index = -40
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -165,6 +165,7 @@ CagePosition = Vector2(0, 70)
 CageSize = Vector2(0, 0)
 
 [node name="Enemies" type="Node2D" parent="."]
-position = Vector2(0, -10)
+z_index = -20
+position = Vector2(0, 10)
 
 [editable path="Cage"]

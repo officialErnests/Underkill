@@ -24,3 +24,5 @@ func SizeChange() -> void:
 	$Left/CS.shape.b = Vector2(0, CageSize.y)
 	$Top/CS.shape.b = Vector2(CageSize.x, 0)
 	$Bottom/CS.shape.b = Vector2(CageSize.x, 0)
+	$ColorRect.size = Vector2(CageSize.x, CageSize.y)
+	$ColorRect.position = $Line2D.points[0]

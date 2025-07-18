@@ -11,9 +11,20 @@
         ],
         "Interactions" : {
             "Check" : [
-                "Filfth - ATK 1.5 HP 0.5",
+                ["Filfth - ATK 1.5 HP 0.5",
                 "Seems hungry, hungry boi",
-                "Filfth - \"RAGHhhh...\""
+                "Filfth - \"RAGHhhh...\""],
+                ["Filfth - ATK 1.5 HP 0.5",
+                "\"RAGH ARGH RAWR\" - Filfth",
+                "Truly wise words"]
+            ],
+            "Insult" : [
+                ["You call him blind",
+                "He seems to not hear that",
+                "You don't seem to be suprised"],
+                ["You try to get his attention",
+                "He runs into wall",
+                "He do be playing blind"]
             ]
         }
     }

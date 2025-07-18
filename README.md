@@ -64,3 +64,8 @@ I got so menu actualy works and brings you to battle altho there is nothing to d
 > - menu travelsar (basics [just there for my own use])
 > - Enemies bob their heads now
 > - Easy enemy json aswell menu json
+### [UPDATED ITCH] MENU DONE ~3h 11m - 16h 39m
+Well the menu works flawlesly (dunno but close enogh), next up enemies, damage and health equipment leveling and so much more (mod support, as evrything is stored in arrays)
+> - cleaned up so much code
+> - cleaned up some parts
+> - went trogh the mess of setting up cool json [litraly all you need to mod is download github and edit array and recompile XD]

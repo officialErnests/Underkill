@@ -15,9 +15,18 @@ var player : CharacterBody2D
 
 var disableNoMercy = false
 var StageSet = StageSets.PLAYER_MENU
-var optionSize = 0
+var optionSize = 1
 var time = 0
+var LastStage = StageSets.ENEMY_ATTACK
+var first = false
+var higlightEnemy = false
+var offsety = 0
+var textReaveal = 0
+var prevText = ""
+var diolString = ""
 
+var LoadedWepons = []
+var WeponRecharge = []
 enum StageSets {
 	ENEMY_ATTACK,
 	PLAYER_ATTACK,
@@ -36,6 +45,8 @@ enum GuiStages {
 	TEXT,
 	BATTLE
 }
+
+var weponMap = []
 
 var CageSizes = {
 	"DEFAULT_CAGE" = [
@@ -59,13 +70,9 @@ var OFFSETS = [
 
 var ADVANCED_OFFSET = Vector2(5,5)
 var advOptions = 0
+var optOptions = 0
 
 var attackEnemies = [
-	"Filfth",
-	"Filfth",
-	"Filfth",
-	"Filfth",
-	"Filfth",
 	"Filfth",
 	"Filfth",
 	"Filfth",
@@ -75,15 +82,13 @@ var allEnemies = []
 
 var ENEMY_INTRO = 1.0
 var enemyIntro = 0
-var StageChanged = true
 var enemyAttack = 0
-var ENEMY_ATTACK_TIME = 10
+var ENEMY_ATTACK_TIME = 5
 var PlayerSel = PlayerPos.Kill
 
 
 func _ready() -> void:
 	UnJsonify()
-	print(enemies_json["Filfth"]["Health"])
 
 	mainControl = $Camera2D/Control
 	cage = $Cage
@@ -100,6 +105,7 @@ func _ready() -> void:
 		if enemies_json[enemy]:
 			var TempEnemy = {
 				"Name" = enemy,
+				"MaxHp" = enemies_json[enemy]["Health"],
 				"Health" = enemies_json[enemy]["Health"],
 				"Damage" = enemies_json[enemy]["Damage"],
 				"Body" = load(enemi_folder_path + enemies_json[enemy]["Body"] + ".tscn").instantiate(),
@@ -117,8 +123,9 @@ func _ready() -> void:
 	for enemy in allEnemies:
 		totalWidth -= enemy["Width"]
 		enemy["Body"].position = Vector2(totalWidth + enemy["Width"]/2,0)
-
-			
+	for weponName in players_json["Equiped"]:
+		LoadedWepons.append(players_json["Items"][weponName])
+		WeponRecharge.append(0)
 
 func UnJsonify() -> void: 
 	var file = FileAccess.open(enemies_json_path, FileAccess.READ)
@@ -134,119 +141,187 @@ func UnJsonify() -> void:
 	players_json = jsonObj2.data
 
 func get_input(_delta) -> void:
-	if StageSet == StageSets.PLAYER_ATTACK:#Litraly has to be before "if StageSet == StageSets.PLAYER_MENU:" or shit breaks XD
-		InputPlayerAttack()
-	if StageSet == StageSets.PLAYER_MENU:
-		InputPlayerMenu()
-	if StageSet == StageSets.ADVANCED_OPTIONS:
-		InputAdvancedOptions()
-	if StageSet == StageSets.OPTION_TEXT:
-		InputOptionText()
+	match StageSet:
+		StageSets.PLAYER_ATTACK:#Litraly has to be before "if StageSet == StageSets.PLAYER_MENU:" or shit breaks XD
+			InputPlayerAttack()
+		StageSets.PLAYER_MENU:
+			InputPlayerMenu()
+		StageSets.ADVANCED_OPTIONS:
+			InputAdvancedOptions()
+		StageSets.OPTION_TEXT:
+			InputOptionText()
 
-func InputPlayerAttack() -> void:
-	if not StageChanged: #debounces jump input
-		if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
-				StageSet = StageSets.ENEMY_ATTACK
-				enemyIntro = ENEMY_INTRO
-				StageChanged = true
-	else:
-		StageChanged = false
 
 func InputPlayerMenu() -> void:
 	PlayerMenuMove()
-	if Input.is_action_just_pressed("Jump"):
+	if Input.is_action_just_pressed("Jump") and not GetStageChange():
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,0,1)
 		StageSet = StageSets.ADVANCED_OPTIONS
-		StageChanged = true
-		if PlayerSel == PlayerPos.Nomercy:
-			mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(0.1,0.1,1.1)
-			disableNoMercy = true
-			PlayerSel = PlayerPos.Nomercy
+
 
 func InputAdvancedOptions() -> void:
 	match PlayerSel:
 			PlayerPos.Kill:
-				optionSize = 3
-				if Input.is_action_just_pressed("Dash"):
-					StageSet = StageSets.PLAYER_MENU
-					StageChanged = true
-				if StageChanged:
-					StageChanged = false
-					DisplayDiologue(["Punch", "Kick", "Shoot"])
-				else:
-					if Input.is_action_just_pressed("Jump"):
-						StageSet = StageSets.OPTION_TEXT
-						StageChanged = true
-			PlayerPos.Bep:
-				if StageChanged:
-					StageChanged = false
+				if GetStageChange():
+					higlightEnemy = false
 					var namesOfEnemies = []
 					for enemie in allEnemies:
 						namesOfEnemies.append(enemie["Name"])
 					DisplayDiologue(namesOfEnemies)
-				advOptions = min(max(advOptions,0),allEnemies.size()-1)
-				if Input.is_action_just_pressed("back"):
-					PlayerSel = PlayerPos.Kill
+					optionSize = allEnemies.size()
+				elif Input.is_action_just_pressed("Jump"):
+						StageSet = StageSets.OPTION_TEXT
+				if Input.is_action_just_pressed("Dash"):
+					StageSet = StageSets.PLAYER_MENU
+			PlayerPos.Bep:
+				if GetStageChange():
+					higlightEnemy = false
+					var namesOfEnemies = []
+					for enemie in allEnemies:
+						namesOfEnemies.append(enemie["Name"])
+					DisplayDiologue(namesOfEnemies)
+					optionSize = allEnemies.size()
+				elif Input.is_action_just_pressed("Jump"):
+					StageSet = StageSets.OPTION_TEXT
+				if Input.is_action_just_pressed("Dash"):
+					StageSet = StageSets.PLAYER_MENU
 			PlayerPos.SSStyle:
-				if StageChanged:
-					StageChanged = false
-					DisplayDiologue(["Well...", "Game broke XD"])
-				advOptions = min(max(advOptions,0),1)
-				if Input.is_action_just_pressed("back"):
-					PlayerSel = PlayerPos.Kill
+				if GetStageChange():
+					higlightEnemy = false
+					var namesOfEnemies = []
+					for enemie in allEnemies:
+						namesOfEnemies.append(enemie["Name"])
+					DisplayDiologue(namesOfEnemies)
+					optionSize = allEnemies.size()
+				elif Input.is_action_just_pressed("Jump"):
+						StageSet = StageSets.OPTION_TEXT
+				if Input.is_action_just_pressed("Dash"):
+					StageSet = StageSets.PLAYER_MENU
 			PlayerPos.Nomercy:
-				if StageChanged:
-					StageChanged = false
-					DisplayDiologue(["Well...", "Game broke XD"])
-				advOptions = min(max(advOptions,0),1)
-				if Input.is_action_just_pressed("back"):
-					PlayerSel = PlayerPos.Kill
+				if GetStageChange():
+					DisplayDiologue(["You sure u want to use railcannon?"])
+					optionSize = 1
+				else:
+					if Input.is_action_just_pressed("Jump"):
+						StageSet = StageSets.OPTION_TEXT
+				if Input.is_action_just_pressed("Dash"):
+					StageSet = StageSets.PLAYER_MENU
 			_:
-				if StageChanged:
-					StageChanged = false
+				if GetStageChange():
 					DisplayDiologue(["Well...", "Game broke XD"])
-				if Input.is_action_just_pressed("back"):
-					PlayerSel = PlayerPos.Kill
+					optionSize = 2
+				if Input.is_action_just_pressed("Dash"):
+					PlayerSel = PlayerPos.Nomercy
+
 
 func InputOptionText() -> void:
 	match PlayerSel:
 		PlayerPos.Kill:
-			if StageChanged:
+			if GetStageChange():
+				higlightEnemy = true
 				optionSize = 1
-				DisplayDiologue(["AGHGHGH"])
-				StageChanged = false
+				var finalStr = []
+				var num = 0
+				for wepon in LoadedWepons:
+					if wepon["KILL"]:
+						weponMap.append(num)
+						if WeponRecharge[num] > 0:
+							finalStr.append("[" + "#".repeat(WeponRecharge[num]) + "]" + wepon["KILL"]["Name"])
+						else:
+							finalStr.append(wepon["KILL"]["Name"])
+					num += 1
+				DisplayDiologue(finalStr)
 			else:
 				if Input.is_action_just_pressed("Jump"):
-					StageChanged = true
-					enemyIntro = ENEMY_INTRO
-					StageSet = StageSets.ENEMY_ATTACK
+					StageSet = StageSets.PLAYER_ATTACK
+			if Input.is_action_just_pressed("Dash"):
+				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.Bep:
-			if Input.is_action_just_pressed("back"):
-				PlayerSel = PlayerPos.Kill
-			if StageChanged:
-				StageChanged = false
-				var namesOfEnemies = []
-				for enemie in allEnemies:
-					namesOfEnemies.append(enemie["Name"])
-				DisplayDiologue(namesOfEnemies)
-				optionSize = allEnemies.size()
+			if GetStageChange():
+				higlightEnemy = true
+				DisplayDiologue(allEnemies[advOptions]["Interactions"])
+				optionSize = allEnemies[advOptions]["Interactions"].size()
+			else:
+				if Input.is_action_just_pressed("Jump"):
+					StageSet = StageSets.PLAYER_ATTACK
+			if Input.is_action_just_pressed("Dash"):
+				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.SSStyle:
-			optionSize = 2
-			if Input.is_action_just_pressed("back"):
-				PlayerSel = PlayerPos.Kill
-			if StageChanged:
-				StageChanged = false
-				DisplayDiologue(["Well...", "Game broke XD"])
+			if GetStageChange():
+				higlightEnemy = true
+				optionSize = 1
+				var finalStr = []
+				var num = 0
+				for wepon in LoadedWepons:
+					if wepon["SSSTYLE"]:
+						weponMap.append(num)
+						if WeponRecharge[num] > 0:
+							finalStr.append("[" + "#".repeat(WeponRecharge[num]) + "]" + wepon["SSSTYLE"]["Name"])
+						else:
+							finalStr.append(wepon["SSSTYLE"]["Name"])
+					num += 1
+				DisplayDiologue(finalStr)
+			else:
+				if Input.is_action_just_pressed("Jump"):
+					StageSet = StageSets.PLAYER_ATTACK
+			if Input.is_action_just_pressed("Dash"):
+				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.Nomercy:
-			optionSize = 2
-			if Input.is_action_just_pressed("back"):
-				PlayerSel = PlayerPos.Kill
-			if StageChanged:
-				StageChanged = false
-				DisplayDiologue(["Well...", "Game broke XD"])
+			optionSize = 1
+			if GetStageChange():
+				DisplayDiologue(["You are really sure?"])
+			else:
+				if Input.is_action_just_pressed("Jump"):
+					StageSet = StageSets.PLAYER_ATTACK
+			if Input.is_action_just_pressed("Dash"):
+				StageSet = StageSets.ADVANCED_OPTIONS
 		_:
-			if Input.is_action_just_pressed("back"):
+			if Input.is_action_just_pressed("Dash"):
 				PlayerSel = PlayerPos.Kill
+
+
+func InputPlayerAttack() -> void:
+	if not GetStageChange(): #debounces jump input
+		if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
+				StageSet = StageSets.ENEMY_ATTACK
+				enemyIntro = ENEMY_INTRO
+	else:
+		match PlayerSel:
+				PlayerPos.Kill:
+					if WeponRecharge[weponMap[optOptions]] > 0:
+						DisplayDiologue(["As you tried that",
+										"you relised you had cooldown",
+										"You must feel stupid :skull:"])
+					else:
+						if LoadedWepons[weponMap[optOptions]]["KILL"]["Chance"] >= randf_range(0,100):
+							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Messages"].pick_random())
+							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Cooldown"]
+						else:
+							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Messages"].pick_random())
+							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Cooldown"]
+				PlayerPos.Bep:
+					DisplayDiologue(allEnemies[advOptions]["Interactions"][allEnemies[advOptions]["Interactions"].keys()[optOptions]].pick_random())
+				PlayerPos.SSStyle:
+					if WeponRecharge[weponMap[optOptions]] > 0:
+						DisplayDiologue(["As you tried that", 
+										"you relised you had cooldown",
+										"No styling onthem ig :<"])
+					else:
+						if LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Chance"] >= randf_range(0,100):
+							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Messages"].pick_random())
+							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Cooldown"]
+						else:
+							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Messages"].pick_random())
+							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Cooldown"]
+				PlayerPos.Nomercy:
+					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(0.1,0.1,1.1)
+					disableNoMercy = true
+					DisplayDiologue(["YOU USED THE RAILCANON",
+									"ENEMIES ARE TOTALY VAPORIZED",
+									"you can say they got...",
+									"railed",
+									"I'm so funny ;u;"])
+
 
 func UpdateCage(delta, cageSet, speed) -> void:
 	cage.CagePosition += (CageSizes[cageSet][0] - cage.CagePosition) * delta * speed
@@ -263,12 +338,17 @@ func UpdateGuiPos() -> void:
 	label.position = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5)
 
 func DisplayDiologue(diol) -> void:
-	var finalStr = ""
+	diolString = ""
 	for line in diol:
-		finalStr += "* " + line + "\n"
-	label.text = finalStr
+		diolString += "* " + line + "\n"
+	if prevText != diolString:
+		textReaveal = 0
 
-func NavigateOptions() -> void:
+func UpdtDiologue(delta) -> void:
+	textReaveal += delta * 100
+	label.text = diolString.substr(0,min(floor(textReaveal),diolString.length()))
+
+func NavigateAdvOptions() -> void:
 	if Input.is_action_just_pressed("Up"):
 		advOptions -= 1
 	if Input.is_action_just_pressed("Down"):
@@ -276,13 +356,28 @@ func NavigateOptions() -> void:
 	advOptions = (advOptions + optionSize)% optionSize
 	player.MenuPos = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5) + Vector2(3,8) + Vector2(0,19) * advOptions
 
-func UpdateEnemi(delta, color, size) -> void:
+func NavigateOptions() -> void:
+	if Input.is_action_just_pressed("Up"):
+		optOptions -= 1
+	if Input.is_action_just_pressed("Down"):
+		optOptions += 1
+	optOptions = (optOptions + optionSize)% optionSize
+	player.MenuPos = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5) + Vector2(3,8) + Vector2(0,19) * optOptions
+
+func UpdateEnemi(delta, color, size, position2) -> void:
 	enemySpawnNode.scale += (size - enemySpawnNode.scale) * delta
 	enemySpawnNode.modulate += (color - enemySpawnNode.modulate) * delta
+	enemySpawnNode.position += (position2 - enemySpawnNode.position) * delta
+	var indx = 0
 	for enemy in allEnemies:
 		var offset = enemy["Offset"]
+		if higlightEnemy and indx == advOptions:
+			enemy["Body"].modulate += (Color(1,0.0,0.0) - enemy["Body"].modulate) * delta * 10
+		else:
+			enemy["Body"].modulate += (Color(1,1,1) - enemy["Body"].modulate) * delta * 10
 		enemy["Body"].get_child(0).position = Vector2(cos(time*2+offset) * 3 + cos(time*2+offset) * 10, cos(time*3+offset) * 3 + sin(time+offset) * 10)
 		enemy["Body"].get_child(1).position = Vector2(cos(time*2+offset) * 10, sin(time+offset) * 10)
+		indx += 1
 
 func RecenterPlayer() -> void:
 	player.PlayerDoge = true
@@ -327,54 +422,58 @@ func SwitchGui(Battle) -> void:
 			mainControl.get_child(1).visible = true
 			label.visible = true
 
+func GetStageChange() -> bool:
+	return LastStage != StageSet
 
 func _physics_process(delta):
+	UpdtDiologue(delta)
 	time += delta
-	
+	if first:
+		print(StageSets.find_key(StageSet))
+		LastStage = StageSet
+	first = LastStage != StageSet
+
 	if StageSet == StageSets.PLAYER_MENU:
-		if StageChanged:
-			SwitchGui(GuiStages.OPTIONS)
-			DisplayDiologue(allEnemies.pick_random()["Intro"].pick_random())
-			StageChanged = false
 		get_input(delta)
-		UpdateEnemi(delta, Color(1,1,1), Vector2(1,1))
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1,1), Vector2(0,-10))
 		UpdateCage(delta, "DEFAULT_CAGE", 2)
 		player.PlayerDoge = false
+		if GetStageChange():
+			SwitchGui(GuiStages.OPTIONS)
+			DisplayDiologue(allEnemies.pick_random()["Intro"].pick_random())
 	elif StageSet == StageSets.ADVANCED_OPTIONS:
-		if StageChanged:
-			StageChanged = false
 		get_input(delta)
 		UpdateCage(delta, "DEFAULT_CAGE", 2)
-		UpdateEnemi(delta, Color(1,1,1), Vector2(1.1,1.1))
-		NavigateOptions()
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1.1,1.2), Vector2(0,0))
+		NavigateAdvOptions()
 	elif StageSet == StageSets.OPTION_TEXT:
-		if StageChanged:
-			StageChanged = false
 		get_input(delta)
 		UpdateCage(delta, "DEFAULT_CAGE", 2)
-		UpdateEnemi(delta, Color(1,1,1), Vector2(1.2,1.2))
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1.5,1.5), Vector2(0,50))
 		NavigateOptions()
 	elif StageSet == StageSets.PLAYER_ATTACK:
-		if StageChanged:
-			StageChanged = false
 		player.MenuPos = Vector2(400,0)
+		UpdateEnemi(delta, Color(1,1,1), Vector2(1.6,1.6), Vector2(0,70))
 		get_input(delta)
 		UpdateCage(delta, "DIOLOGUE_CAGE", 2)
 		SwitchGui(GuiStages.TEXT)
-		DisplayDiologue(["You used railcanon","It missed","You realised your aim sucks"])
 	elif StageSet == StageSets.ENEMY_ATTACK:
-		UpdateEnemi(delta, Color(0.2,0.2,0.2), Vector2(0.7,0.7))
-		if enemyIntro > 0 or StageChanged:
-			if StageChanged:
+		UpdateEnemi(delta, Color(0.2,0.2,0.2), Vector2(0.7,0.7), Vector2(0,-70))
+		if enemyIntro > 0 or GetStageChange():
+			if GetStageChange():
 				SwitchGui(GuiStages.BATTLE)
 				RecenterPlayer()
-				StageChanged = false
+				higlightEnemy = false
 			UpdateCage(delta, "CAGE_SMALL", 5)
 			enemyIntro -= delta
+			enemyAttack = 0
 		else:
 			if ENEMY_ATTACK_TIME < enemyAttack:
-				StageChanged = true
 				StageSet = StageSets.PLAYER_MENU
+				#Now lets comment the most understandable part of the code (i wish this was a joke [this dosn't imply i will comment my code tho XD])
+				for wep in range(WeponRecharge.size()):
+					if WeponRecharge[wep] > 0:
+						WeponRecharge[wep] -= 1
 			enemyAttack += delta
 			SetCageSize("CAGE_SMALL")
 

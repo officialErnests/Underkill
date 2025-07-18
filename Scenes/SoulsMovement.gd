@@ -184,7 +184,6 @@ func DetSlide() -> void:
 func DetRecoverySlide() -> void:
 	if Input.is_action_just_pressed("Slide"):
 		slideSpeed = max(min(groundslamDistance, GROUNDSLAM_DISTANCE) * GROUNDSLAM_SPEED * 5.0,0)
-		print(slideSpeed)
 		PlrMovement = EnumPlrMovement.SLIDE
 
 func Slide() -> void:
@@ -198,6 +197,7 @@ func Slide() -> void:
 		PlrMovement = EnumPlrMovement.GROUNDED
 
 func get_input(delta) -> void:
+	#such a good practice ;-; i ain't regreting this not at all ToT
 	delta *= 10
 
 	if energy < 3:
