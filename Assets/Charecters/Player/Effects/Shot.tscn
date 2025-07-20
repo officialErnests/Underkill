@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3 uid="uid://xdf8tpvjtbri"]
+
+[ext_resource type="Texture2D" uid="uid://bu4epctb3p04g" path="res://Assets/Charecters/Player/HitSpriteSheet.png" id="1_trrsb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofqyi"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxtfw"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mnt8x"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xk8bx"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6h10"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74ulc"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w51te"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2k5o"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5gbu"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pyvyv"]
+atlas = ExtResource("1_trrsb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ltyi"]
+animations = [{
+"frames": [{
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_ofqyi")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_mxtfw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mnt8x")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_xk8bx")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_y6h10")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_74ulc")
+}, {
+"duration": 4.0,
+"texture": SubResource("AtlasTexture_w51te")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_74ulc")
+}, {
+"duration": 4.0,
+"texture": SubResource("AtlasTexture_w51te")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_u2k5o")
+}, {
+"duration": 4.0,
+"texture": SubResource("AtlasTexture_y5gbu")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_pyvyv")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="HitSprite" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_8ltyi")
+speed_scale = 2.0

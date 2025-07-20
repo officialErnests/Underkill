@@ -3,6 +3,7 @@
         "Health" : 0.5,
         "Damage" : 1.5,
         "Body" : "Filfth",
+        "Points" : 10,
         "Width" : 50,
         "Intro" : [
             ["Filfth jumps in!"],

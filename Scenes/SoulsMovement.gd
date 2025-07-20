@@ -57,7 +57,8 @@ var lastDirection = 1
 var energy = 3
 var wallCoyoti = 0
 var wallNormal = Vector2(0,0)
-var prevPrint = ""
+#DEBUG PRINT
+# var prevPrint = ""
 var groundslamRecoveryTime = 0
 var groundslamDistance = 0
 var slideSpeed = 0
@@ -263,9 +264,9 @@ func get_input(delta) -> void:
 			CoyoteWall()
 			PlrMovement = EnumPlrMovement.GROUNDED
 
-	if prevPrint !=EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement):
-		prevPrint = EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement)
-		print(prevPrint)
+	# if prevPrint !=EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement):
+	# 	prevPrint = EnumPlayerStates.find_key(CurentPlayersState) + " " + EnumPlrMovement.find_key(PlrMovement)
+	# 	print(prevPrint)
 
 	if PlrMovement == EnumPlrMovement.GROUNDED:
 		Movement(delta)

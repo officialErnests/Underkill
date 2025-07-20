@@ -10,6 +10,7 @@
                 "Name" : "Smack 'em",
                 "Chance" : 100,
                 "Succes" : {
+                    "Effect" : "Shot",
                     "Damage" : 1,
                     "Cooldown" : 2,
                     "Explosion" : 0,
@@ -22,6 +23,7 @@
                     ]
                 },
                 "Fail" : {
+                    "Effect" : "Shot",
                     "Damage" : 0,
                     "Explosion" : 0,
                     "Cooldown" : 1,

@@ -69,3 +69,12 @@ Well the menu works flawlesly (dunno but close enogh), next up enemies, damage a
 > - cleaned up so much code
 > - cleaned up some parts
 > - went trogh the mess of setting up cool json [litraly all you need to mod is download github and edit array and recompile XD]
+## Day 5
+### [UPDATED ITCH] KILL ~3h 28m -20h 7m
+I made so you can kill enemies (so cool :D love em violence), mostly numbers so it looks fire XD
+[Had big debug sesion since i had bug where game crashed when tried removing enemies so thats why its 3hrs ;-; at the end i decided to rewrite the code]
+(also bc they are filth they die in one hit [lore acurate XD])
+> - Enemy healthbar
+> - Enemies die and cool animation plays
+> - Fight animation
+> - Victory screen
