@@ -462,7 +462,7 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 				attackStage += 1
 		if attackStage == 3:#dmg
 			if attackDebounce[higindex]:
-				# enemy["Health"] -= attackDmg
+				enemy["Health"] -= attackDmg
 				attackDebounce[higindex] = false
 			ofsseter = pow(((2.6-attackAnim)*2),2) * 10
 			if attackAnim > 2.5:
