@@ -78,3 +78,6 @@ I made so you can kill enemies (so cool :D love em violence), mostly numbers so 
 > - Enemies die and cool animation plays
 > - Fight animation
 > - Victory screen
+### Multi attacks ~2h 19m -22h 26m
+Made so attacks can damage multiple enemies (had to rewrite alot XD) now only thing i need is some nice dmg numbers and only then i will move on. [experimented with hit lag but it looked horible ;-;]
+> - Multikill

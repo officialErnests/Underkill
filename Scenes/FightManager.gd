@@ -29,9 +29,11 @@ var diolString = ""
 var attackStage = 7
 var attackAnim = 0
 var attackDmg = 0
-var loadedEffect = null
+var loadEffectString = ""
+var loadedEffect = []
 var allKilled = []
 var fightRewards = 0
+var attackRange = 0
 
 var LoadedWepons = []
 var WeponRecharge = []
@@ -82,6 +84,10 @@ var advOptions = 0
 var optOptions = 0
 
 var attackEnemies = [
+	"Filfth",
+	"Filfth",
+	"Filfth",
+	"Filfth",
 	"Filfth"
 ]
 var allEnemies = []
@@ -91,7 +97,7 @@ var enemyIntro = 0
 var enemyAttack = 0
 var ENEMY_ATTACK_TIME = 10
 var PlayerSel = PlayerPos.Kill
-var attackDebounce = true
+var attackDebounce = []
 
 func _ready() -> void:
 	UnJsonify()
@@ -120,18 +126,18 @@ func _ready() -> void:
 				"Interactions" = enemies_json[enemy]["Interactions"],
 				"PosOffset" = 0,
 				"Points" = enemies_json[enemy]["Points"],
-				"Offset" = offseter
+				"Offset" = offseter,
 			}
 			offseter += 0.3
 			enemySpawnNode.add_child(TempEnemy["Body"])
 			TempEnemy["Body"].position = Vector2(0,0)
-			totalWidth += TempEnemy["Width"]/2
+			totalWidth -= TempEnemy["Width"]/2
 			allEnemies.append(TempEnemy)
 
 	for enemy in allEnemies:
-		totalWidth -= enemy["Width"]
-		enemy["Body"].position = Vector2(totalWidth + enemy["Width"]/2,0)
-		enemy["PosOffset"] = Vector2(totalWidth + enemy["Width"]/2,0)
+		totalWidth += enemy["Width"]
+		enemy["Body"].position = Vector2(totalWidth - enemy["Width"]/2,0)
+		enemy["PosOffset"] = Vector2(totalWidth - enemy["Width"]/2,0)
 	for weponName in players_json["Equiped"]:
 		LoadedWepons.append(players_json["Items"][weponName])
 		WeponRecharge.append(0)
@@ -208,10 +214,13 @@ func InputAdvancedOptions() -> void:
 					StageSet = StageSets.PLAYER_MENU
 			PlayerPos.Nomercy:
 				if GetStageChange():
-					DisplayDiologue(["You sure u want to use railcannon?"])
-					optionSize = 1
-				else:
-					if Input.is_action_just_pressed("Jump"):
+					higlightEnemy = false
+					var namesOfEnemies = []
+					for enemie in allEnemies:
+						namesOfEnemies.append(enemie["Name"])
+					DisplayDiologue(namesOfEnemies)
+					optionSize = allEnemies.size()
+				elif Input.is_action_just_pressed("Jump"):
 						StageSet = StageSets.OPTION_TEXT
 				if Input.is_action_just_pressed("Dash"):
 					StageSet = StageSets.PLAYER_MENU
@@ -277,7 +286,9 @@ func InputOptionText() -> void:
 				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.Nomercy:
 			optionSize = 1
+			attackRange = 1
 			if GetStageChange():
+				higlightEnemy = true
 				DisplayDiologue(["You are really sure?"])
 			else:
 				if Input.is_action_just_pressed("Jump"):
@@ -293,13 +304,6 @@ func InputPlayerAttack() -> void:
 	match PlayerSel:
 			PlayerPos.Kill:
 				if GetStageChange():
-					attackDmg = LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Damage"]
-					loadedEffect = load(player_effect_path + LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"] + ".tscn").instantiate()
-					loadedEffect.scale = Vector2.ONE * 5
-					loadedEffect.visible = false
-					add_child(loadedEffect)
-					attackAnim = 0
-					attackStage = 0
 					if WeponRecharge[weponMap[optOptions]] > 0:
 						DisplayDiologue(["As you tried that",
 										"you relised you had cooldown",
@@ -309,10 +313,17 @@ func InputPlayerAttack() -> void:
 						if LoadedWepons[weponMap[optOptions]]["KILL"]["Chance"] >= randf_range(0,100):
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Cooldown"]
+							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Cooldown"]
-							attackDmg = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"]
+							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
+				else:
+					if WeponRecharge[weponMap[optOptions]] > 0:
+						if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
+								StageSet = StageSets.ENEMY_ATTACK
+								enemyIntro = ENEMY_INTRO
+
 			PlayerPos.Bep:
 				if not GetStageChange(): #debounces jump input
 					if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
@@ -338,12 +349,9 @@ func InputPlayerAttack() -> void:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Cooldown"]
 			PlayerPos.Nomercy:
-				if not GetStageChange(): #debounces jump input
-					if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
-							StageSet = StageSets.ENEMY_ATTACK
-							enemyIntro = ENEMY_INTRO
-				else:
-					mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(0.1,0.1,1.1)
+				if GetStageChange():
+					attack(8, 1, "Shot")
+					mainControl.get_child(1).get_child(3).modulate = Color(0.1,0.1,1.1)
 					disableNoMercy = true
 					DisplayDiologue(["YOU USED THE RAILCANON",
 									"ENEMIES ARE TOTALY VAPORIZED",
@@ -351,6 +359,14 @@ func InputPlayerAttack() -> void:
 									"railed",
 									"I'm so funny ;u;"])
 
+
+func attack(dmg, attRange, effectName) -> void:
+	attackDmg = dmg
+	attackRange = attRange
+	loadEffectString = effectName
+	attackAnim = 0
+	attackStage = 0
+	higlightEnemy = true
 
 func UpdateCage(delta, cageSet, speed) -> void:
 	cage.CagePosition += (CageSizes[cageSet][0] - cage.CagePosition) * delta * speed
@@ -396,72 +412,115 @@ func NavigateOptions() -> void:
 func UpdateEnemi(delta, color, size, position2) -> void:
 	enemySpawnNode.scale += (size - enemySpawnNode.scale) * delta
 	var indx = 0
-	for enemy in allEnemies:
+	for enemy in allEnemies: #updates all enemies
 		var offset = enemy["Offset"]
-		var timeoffset = 0
-		if higlightEnemy and indx == advOptions:
+		if higlightEnemy and abs(indx - advOptions) <= attackRange:
 			enemy["Body"].get_child(0).modulate += (Color(1,0,0) - enemy["Body"].get_child(0).modulate) * delta
 			enemy["Body"].get_child(1).modulate += (Color(1,0,0) - enemy["Body"].get_child(1).modulate) * delta
 			enemy["Body"].scale += (size + Vector2(0.3,0.3) - enemy["Body"].scale) * delta
 			enemy["Body"].position += (position2 - enemy["Body"].position + enemy["PosOffset"] + Vector2(0,10)) * delta
 			enemy["Body"].get_child(2).get_child(0).get_child(1).anchor_right += (enemy["Health"] / enemy["MaxHp"] - enemy["Body"].get_child(2).get_child(0).get_child(1).anchor_right) * delta
-			if attackStage == 0:#Show health
-				enemy["Body"].get_child(2).modulate = Color(1,1,1,attackAnim/0.3)
-				if attackAnim > 0.3:
-					attackStage += 1
-			elif attackStage == 1: #Anticipation
-				if attackAnim > 0.5:
-					attackStage += 1
-			elif attackStage == 2:#slash
-				if loadedEffect:
-					loadedEffect.visible = true
-					loadedEffect.get_child(0).play()
-					loadedEffect.position =  enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
-				if attackAnim > 1.5:
-					attackStage += 1
-			elif attackStage == 3:#dmg
-				if loadedEffect:
-					loadedEffect.queue_free()
-				if attackDebounce:
-					enemy["Health"] -= attackDmg
-					attackDebounce = false
-				timeoffset = pow(((2.5-attackAnim)*2),2) * 10
-				if attackAnim > 2.5:
-					attackDebounce = true
-					attackStage += 1
-			elif attackStage == 4:#check if enemy died and play animation
-				if enemy["Health"] < 0:
-					fightRewards += enemy["Points"]
-					var random1 = randf_range(-100,100)
-					allKilled.append([enemy["Body"],[Vector2(random1,randf_range(-400,-200)),random1/100],[Vector2(-random1,randf_range(-400,-200)),-random1/100]])
-					allEnemies.remove_at(indx)
-					enemyIntro = ENEMY_INTRO
-					higlightEnemy = false
-					enemy["Body"].get_child(2).modulate = Color(1,1,1,0)
-					attackStage = 7
-					if allEnemies.size() > 0:
-						StageSet = StageSets.ENEMY_ATTACK
-					else:
-						StageSet = StageSets.VICTORY
-					continue
-				if attackAnim > 3:
-					attackStage += 1
-			elif attackStage == 5:#hides health
-				enemy["Body"].get_child(2).modulate = Color(1,1,1,(3.2-attackAnim)/0.2)
-				if attackAnim > 3.2:
-					attackStage += 1
-			elif attackStage == 6:
-				attackStage += 1
-				StageSet = StageSets.ENEMY_ATTACK
-				enemyIntro = ENEMY_INTRO
 		else:
 			enemy["Body"].get_child(0).modulate += (color - enemy["Body"].get_child(0).modulate) * delta
 			enemy["Body"].get_child(1).modulate += (color - enemy["Body"].get_child(1).modulate) * delta
 			enemy["Body"].scale += (Vector2.ONE - enemy["Body"].scale) * delta
 			enemy["Body"].position += (position2 - enemy["Body"].position + enemy["PosOffset"]) * delta
-		enemy["Body"].get_child(0).position = Vector2(cos(time*2+offset+timeoffset/2.0) * 3 + cos(time*2+offset+timeoffset/2.0) * 10, cos(time*3+offset+timeoffset) * 3 + sin(time+offset+timeoffset) * 10)
-		enemy["Body"].get_child(1).position = Vector2(cos(time*2+offset+timeoffset) * 10, sin(time+offset+timeoffset/2.0) * 10)
+		enemy["Body"].get_child(0).position =  Vector2(cos(time*2+offset) * 3 + cos(time*2+offset) * 10, cos(time*3+offset) * 3 + sin(time+offset) * 10)
+		enemy["Body"].get_child(1).position = Vector2(cos(time*2+offset) * 10, sin(time+offset) * 10)
 		indx += 1
+	
+	indx = 0
+	var higindex = 0
+	var nextTunr = 0
+	var removeIndex = []
+	for enemy in allEnemies:
+		if not higlightEnemy or abs(indx - advOptions) > attackRange: 
+			indx += 1
+			continue
+		var offset = enemy["Offset"]
+		var ofsseter = 0
+		if attackStage == 0:#Show health
+			enemy["Body"].get_child(2).modulate = Color(1,1,1,attackAnim/0.3)
+			attackDebounce.append(true)
+			if attackAnim > 0.3:
+				attackStage += 1
+		if attackStage == 1: #Anticipation
+			if attackAnim > 0.5:
+				attackStage += 1
+		if attackStage == 2:#slash
+			if loadedEffect.size() > higindex:
+				loadedEffect[higindex].visible = true
+				loadedEffect[higindex].get_child(0).play()
+				loadedEffect[higindex].position =  enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
+			else:
+				loadedEffect.append(load(player_effect_path + loadEffectString + ".tscn").instantiate())
+				loadedEffect[higindex].scale = Vector2.ONE * 5
+				loadedEffect[higindex].visible = false
+				add_child(loadedEffect[higindex])
+				print(loadedEffect)
+			if attackAnim > 1.5:
+				attackStage += 1
+		if attackStage == 3:#dmg
+			if attackDebounce[higindex]:
+				# enemy["Health"] -= attackDmg
+				attackDebounce[higindex] = false
+			ofsseter = pow(((2.6-attackAnim)*2),2) * 10
+			if attackAnim > 2.5:
+				if attackDebounce.size() > 0:
+					for nothing in range(attackDebounce.size()): attackDebounce.pop_front()
+				attackStage += 1
+		if attackStage == 4:#check if enemy died and play animation
+			if enemy["Health"] < 0:
+				fightRewards += enemy["Points"]
+				var random1 = randf_range(-100,100)
+				allKilled.append([enemy["Body"],[Vector2(random1,randf_range(-400,-200)),random1/100],[Vector2(-random1,randf_range(-400,-200)),-random1/100]])
+				removeIndex.append(indx)
+				enemyIntro = ENEMY_INTRO
+				if nextTunr == 0: nextTunr = 1
+				enemy["Body"].get_child(2).modulate = Color(1,1,1,0)
+			else:
+				nextTunr = 2
+			if attackAnim > 3.5:
+				attackStage += 1
+		if attackStage == 5:#hides health
+			enemy["Body"].get_child(2).modulate = Color(1,1,1,(3.7-attackAnim)/0.2)
+			if attackAnim > 3.7:
+				attackStage += 1
+		if attackStage == 6:
+			attackStage += 1
+			nextTunr = 1
+			enemyIntro = ENEMY_INTRO
+		indx += 1
+		higindex += 1
+		enemy["Body"].get_child(0).position = Vector2(cos(time*2+offset+ofsseter/2.0) * 3 + cos(time*2+offset+ofsseter/2.0) * 10, cos(time*3+offset+ofsseter) * 3 + sin(time+offset+ofsseter) * 10)
+		enemy["Body"].get_child(1).position = Vector2(cos(time*2+offset+ofsseter) * 10, sin(time+offset+ofsseter/2.0) * 10)
+	removeIndex.reverse()
+	if attackStage >= 3:
+		if loadedEffect.size() > 0:
+			for i in range(loadedEffect.size()):
+				loadedEffect[0].queue_free()
+				loadedEffect.pop_front()
+
+	var redoEnemies = false
+	for indexs in removeIndex:
+		redoEnemies = true
+		allEnemies.remove_at(indexs)
+	if redoEnemies:
+		var totalWidth = 0
+		var offseter = 0
+		for enemyIter1 in allEnemies:
+			totalWidth -= enemyIter1["Width"]/2
+			enemyIter1["Offset"] = offseter
+			offseter += 0.3
+		for enemyIter2 in allEnemies:
+			totalWidth += enemyIter2["Width"]
+			enemyIter2["Body"].position = Vector2(totalWidth - enemyIter2["Width"]/2,0)
+			enemyIter2["PosOffset"] = Vector2(totalWidth - enemyIter2["Width"]/2,0)
+	if nextTunr == 1: 
+		StageSet = StageSets.ENEMY_ATTACK
+		attackStage = 7
+	if allEnemies.size() <= 0:
+		StageSet = StageSets.VICTORY
 
 func RecenterPlayer() -> void:
 	player.PlayerDoge = true
@@ -471,6 +530,10 @@ func RecenterPlayer() -> void:
 func PlayerMenuMove() -> void:
 	player.MenuPos = mainControl.position + OFFSETS[PlayerSel as int]
 	mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
+	if disableNoMercy:
+		mainControl.get_child(1).get_child(3).modulate = Color(0.5,0.5,0.5)
+		if PlayerSel == PlayerPos.Nomercy:
+			PlayerSel = PlayerPos.Kill
 	if Input.is_action_just_pressed("Left"):
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel - 1 as PlayerPos
@@ -482,7 +545,7 @@ func PlayerMenuMove() -> void:
 	if Input.is_action_just_pressed("Right"):
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel + 1 as PlayerPos
-		if disableNoMercy and PlayerSel > 4:
+		if disableNoMercy and PlayerSel > 2:
 			PlayerSel = 0 as PlayerPos
 		elif not disableNoMercy and PlayerSel > 3:
 			PlayerSel = 0 as PlayerPos
@@ -562,6 +625,7 @@ func _physics_process(delta):
 		UpdateCage(delta, "DIOLOGUE_CAGE", 2)
 		SwitchGui(GuiStages.TEXT)
 	elif StageSet == StageSets.ENEMY_ATTACK:
+		higlightEnemy = false
 		UpdateEnemi(delta, Color(0.4,0.4,0.4), Vector2(0.5,0.5), Vector2(400,-70))
 		if enemyIntro > 0 or GetStageChange():
 			if GetStageChange():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://duumy4wts4l7d"]
+[gd_scene load_steps=12 format=3 uid="uid://duumy4wts4l7d"]
 
 [ext_resource type="Script" uid="uid://ciibd7fewfxj6" path="res://Scenes/FightManager.gd" id="1_25nby"]
 [ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="2_ksuxo"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dnnq3xult5jwp" path="res://Assets/Charecters/Player/Ui/Style.png" id="5_8ri3v"]
 [ext_resource type="Texture2D" uid="uid://ban6gioa6b7ei" path="res://Assets/Charecters/Player/Ui/NOMERCY.png" id="6_3gfpi"]
 [ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="7_koqdt"]
+[ext_resource type="PackedScene" uid="uid://bfews32v8smw7" path="res://Scenes/BorderEff.tscn" id="10_8ri3v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ksuxo"]
 shader = ExtResource("2_ksuxo")
@@ -167,5 +168,13 @@ CageSize = Vector2(0, 0)
 [node name="Enemies" type="Node2D" parent="."]
 z_index = -20
 position = Vector2(0, 10)
+
+[node name="Control" parent="." instance=ExtResource("10_8ri3v")]
+visible = false
+z_index = 10
+offset_left = -320.0
+offset_top = -180.0
+offset_right = -320.0
+offset_bottom = -180.0
 
 [editable path="Cage"]
