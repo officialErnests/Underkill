@@ -2,6 +2,7 @@
 ## Undertale x ultrakill
 It's an unedrtale un ultrakill mashup
 > Whole project was writen by human, 0 ai since i like pain raw B) so bugs to be expected XD
+> Also audio from ULTRAKILL [https://store.steampowered.com/app/1229490/ULTRAKILL]
 # Play in browser -> https://n0o0b090lv.itch.io/underkill
 # What did i learn?
 - How to setup godot with github and vscode
@@ -81,3 +82,11 @@ I made so you can kill enemies (so cool :D love em violence), mostly numbers so 
 ### Multi attacks ~2h 19m -22h 26m
 Made so attacks can damage multiple enemies (had to rewrite alot XD) now only thing i need is some nice dmg numbers and only then i will move on. [experimented with hit lag but it looked horible ;-;]
 > - Multikill
+## Day 6
+### Dmg numbers ~49m - 23h 15m
+Small update just added some dmg numbers and bugfixed a litle
+> - Dmg numbers
+> - Can't skip kill anim <;
+### AUDIO ~1h 48m -25h 3m
+Added some ultrakill sounds so you don't have to sit in silence.
+> - Audio

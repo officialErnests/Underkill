@@ -9,7 +9,7 @@ var player_effect_path = "res://Assets//Charecters//Player//Effects//"
 var players_json_path = "res://Assets//Charecters//Player//diologue.json"
 var players_json: Dictionary = {}
 
-
+var dmgNumb = preload("res://Assets//Others//damage.tscn")
 var mainControl : Control
 var label : Label
 var cage : Node2D
@@ -34,6 +34,8 @@ var loadedEffect = []
 var allKilled = []
 var fightRewards = 0
 var attackRange = 0
+var dmgNumbers = []
+var skipAttack = false
 
 var LoadedWepons = []
 var WeponRecharge = []
@@ -127,6 +129,7 @@ func _ready() -> void:
 				"PosOffset" = 0,
 				"Points" = enemies_json[enemy]["Points"],
 				"Offset" = offseter,
+				"DmgAudio" = enemies_json[enemy]["DmgAudio"]
 			}
 			offseter += 0.3
 			enemySpawnNode.add_child(TempEnemy["Body"])
@@ -305,10 +308,12 @@ func InputPlayerAttack() -> void:
 			PlayerPos.Kill:
 				if GetStageChange():
 					if WeponRecharge[weponMap[optOptions]] > 0:
+						skipAttack = true
 						DisplayDiologue(["As you tried that",
 										"you relised you had cooldown",
 										"You must feel stupid :skull:"])
 					else:
+						skipAttack = false
 						allEnemies[advOptions]["Body"].get_child(2).visible = true
 						if LoadedWepons[weponMap[optOptions]]["KILL"]["Chance"] >= randf_range(0,100):
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Messages"].pick_random())
@@ -319,7 +324,7 @@ func InputPlayerAttack() -> void:
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Cooldown"]
 							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
 				else:
-					if WeponRecharge[weponMap[optOptions]] > 0:
+					if skipAttack:
 						if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
 								StageSet = StageSets.ENEMY_ATTACK
 								enemyIntro = ENEMY_INTRO
@@ -451,7 +456,7 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 			if loadedEffect.size() > higindex:
 				loadedEffect[higindex].visible = true
 				loadedEffect[higindex].get_child(0).play()
-				loadedEffect[higindex].position =  enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
+				loadedEffect[higindex].position = enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
 			else:
 				loadedEffect.append(load(player_effect_path + loadEffectString + ".tscn").instantiate())
 				loadedEffect[higindex].scale = Vector2.ONE * 5
@@ -464,6 +469,10 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 			if attackDebounce[higindex]:
 				enemy["Health"] -= attackDmg
 				attackDebounce[higindex] = false
+				var tempDmgNumber = dmgNumb.instantiate()
+				add_child(tempDmgNumber)
+				tempDmgNumber.position = enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
+				dmgNumbers.append([tempDmgNumber, Vector2(randf_range(-100,100),-200),3])
 			ofsseter = pow(((2.6-attackAnim)*2),2) * 10
 			if attackAnim > 2.5:
 				if attackDebounce.size() > 0:
@@ -586,13 +595,58 @@ func UpdateDeadEnemies(delta) -> void:
 			return
 		index += 1
 
+func updateDmgNumbers(delta) -> void:
+	var indexToDel = []
+	var index = -1
+	for dmgNumber in dmgNumbers:
+		index += 1
+		if dmgNumber[2] <= 0 :
+			indexToDel.append(index)
+		else:
+			dmgNumber[0].position += dmgNumber[1] * delta
+			dmgNumber[1] += Vector2(0,98) * delta * 10
+			if dmgNumber[0].position.y >= -50:
+				dmgNumber[0].position.y = -50
+				dmgNumber[1].x *= 0.8
+				dmgNumber[1].y *= -0.8
+			dmgNumber[2] -= delta
+			dmgNumber[0].modulate = Color(1,1,1,min(1,dmgNumber[2]))
+	indexToDel.reverse()
+	for indx in indexToDel:
+		dmgNumbers[indx][0].queue_free()
+		dmgNumbers.remove_at(indx)
 
 func GetStageChange() -> bool:
 	return LastStage != StageSet
 
+func playAudio() -> void:
+	if GetStageChange():
+		if LastStage == StageSets.ENEMY_ATTACK:
+			$Cage/Audio/Start.play()
+		if LastStage == StageSets.PLAYER_MENU:
+			$Cage/Audio/Pick.play()
+		if LastStage == StageSets.ADVANCED_OPTIONS:
+			if StageSet == StageSets.PLAYER_MENU:
+				$Cage/Audio/Back.play()
+			if StageSet == StageSets.OPTION_TEXT:
+				$Cage/Audio/Pick.play()
+		if LastStage == StageSets.OPTION_TEXT:
+			if StageSet == StageSets.ADVANCED_OPTIONS:
+				$Cage/Audio/Back.play()
+			if StageSet == StageSets.PLAYER_ATTACK:
+				$Cage/Audio/Pick.play()
+		if LastStage == StageSets.PLAYER_ATTACK:
+			if StageSet == StageSets.VICTORY:
+				$Cage/Audio/CrowdApplause.play()
+				$Cage/Audio/CrowdCheerLong.play()
+			else:
+				$Cage/Audio/Exit.play()
+
 func _physics_process(delta):
+	updateDmgNumbers(delta)
 	UpdtDiologue(delta)
 	UpdateDeadEnemies(delta)
+	playAudio()
 	attackAnim += delta
 	time += delta
 	if first:
@@ -607,7 +661,11 @@ func _physics_process(delta):
 		player.PlayerDoge = false
 		if GetStageChange():
 			SwitchGui(GuiStages.OPTIONS)
-			DisplayDiologue(allEnemies.pick_random()["Intro"].pick_random())
+			var randEn = allEnemies.pick_random()
+			print(randEn["DmgAudio"])
+			if LastStage != StageSets.PLAYER_MENU:
+				randEn["Body"].get_child(3).get_node(randEn["DmgAudio"]).play()
+				DisplayDiologue(randEn["Intro"].pick_random())
 	elif StageSet == StageSets.ADVANCED_OPTIONS:
 		get_input(delta)
 		UpdateCage(delta, "DEFAULT_CAGE", 2)

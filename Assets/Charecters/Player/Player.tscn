@@ -1,7 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://hh88t1tvx72q"]
+[gd_scene load_steps=32 format=3 uid="uid://hh88t1tvx72q"]
 
 [ext_resource type="Script" uid="uid://c6aghayiolkov" path="res://Scenes/SoulsMovement.gd" id="1_6l1uj"]
 [ext_resource type="Texture2D" uid="uid://dr3i01skh03b4" path="res://Assets/Charecters/Player/UltraHeart.png" id="2_i0s3y"]
+[ext_resource type="AudioStream" uid="uid://cv7s5avxir67l" path="res://Assets/UltrakillAudio/Player/Blood.wav" id="3_tohpi"]
+[ext_resource type="AudioStream" uid="uid://dar8unr2lj260" path="res://Assets/UltrakillAudio/Player/Bluezone-Autobots-footstep-013.wav" id="4_j0n07"]
+[ext_resource type="AudioStream" uid="uid://c0mtpagpncv61" path="res://Assets/UltrakillAudio/Player/chainsawSwing2.wav" id="5_l5f43"]
+[ext_resource type="AudioStream" uid="uid://tuqthv04ldlf" path="res://Assets/UltrakillAudio/Player/coinflip.wav" id="6_nsjf2"]
+[ext_resource type="AudioStream" uid="uid://tgfbfogmajvb" path="res://Assets/UltrakillAudio/Player/explosion_large_08.wav" id="7_k8108"]
+[ext_resource type="AudioStream" uid="uid://dc8d73qqfmn4g" path="res://Assets/UltrakillAudio/Player/fistReload.wav" id="8_eji56"]
+[ext_resource type="AudioStream" uid="uid://o1m86haarj7h" path="res://Assets/UltrakillAudio/Player/footstep_heavy1.wav" id="9_be5op"]
+[ext_resource type="AudioStream" uid="uid://cmyrs6e4e0gnb" path="res://Assets/UltrakillAudio/Player/footstep_heavy2.wav" id="10_uxbqn"]
+[ext_resource type="AudioStream" uid="uid://u24c7pf5t1qu" path="res://Assets/UltrakillAudio/Player/footstep_heavy3.wav" id="11_gewhk"]
+[ext_resource type="AudioStream" uid="uid://bough8007t2ru" path="res://Assets/UltrakillAudio/Player/footstep_heavy4.wav" id="12_rbd1f"]
+[ext_resource type="AudioStream" uid="uid://dchgsofooc6im" path="res://Assets/UltrakillAudio/Player/HpGet.wav" id="13_sc4nj"]
+[ext_resource type="AudioStream" uid="uid://bbdjig2n2k7l5" path="res://Assets/UltrakillAudio/Player/Impacts_SIMPLE_003.wav" id="14_ld72d"]
+[ext_resource type="AudioStream" uid="uid://dlycbi5a37jv1" path="res://Assets/UltrakillAudio/Player/LandingHeavy.wav" id="15_geoio"]
+[ext_resource type="AudioStream" uid="uid://bg3f2d656o1mq" path="res://Assets/UltrakillAudio/Player/punch_projectile.wav" id="16_ccm32"]
+[ext_resource type="AudioStream" uid="uid://d2m7j68clmd5w" path="res://Assets/UltrakillAudio/Player/Landing.wav" id="16_l5f43"]
+[ext_resource type="AudioStream" uid="uid://cp4w4c6u0i2kj" path="res://Assets/UltrakillAudio/Player/RailcannonFire4.wav" id="17_wjm0j"]
+[ext_resource type="AudioStream" uid="uid://20re8qb2rdso" path="res://Assets/UltrakillAudio/Player/Ricochet.wav" id="18_ce7b5"]
+[ext_resource type="AudioStream" uid="uid://cirmxg857ire0" path="res://Assets/UltrakillAudio/Player/Shoot1.wav" id="19_lirlu"]
+[ext_resource type="AudioStream" uid="uid://nssw0kw7ylir" path="res://Assets/UltrakillAudio/Player/shotgunpump1.wav" id="20_1indm"]
+[ext_resource type="AudioStream" uid="uid://caic7eqyq8b0f" path="res://Assets/UltrakillAudio/Player/Steampunk Weapons - Shotgun 2 - Shot - 03.wav" id="21_r0wpg"]
+[ext_resource type="AudioStream" uid="uid://3pyk813igorq" path="res://Assets/UltrakillAudio/Player/Twirling.wav" id="22_ppv6p"]
+[ext_resource type="AudioStream" uid="uid://xr2xsw886d2c" path="res://Assets/UltrakillAudio/Player/wallcling.wav" id="23_xf0sj"]
+[ext_resource type="AudioStream" uid="uid://by8gk3todb7io" path="res://Assets/UltrakillAudio/Player/Whoosh.wav" id="24_wukho"]
+[ext_resource type="AudioStream" uid="uid://cqs0ae3i0yt5u" path="res://Assets/UltrakillAudio/Player/Dodge3.wav" id="25_j0n07"]
 
 [sub_resource type="Gradient" id="Gradient_6l1uj"]
 colors = PackedColorArray(1, 1, 1, 1, 0.59, 0.59, 0.59, 0)
@@ -78,3 +102,78 @@ speed_scale = 3.0
 collision_base_size = 0.0
 trail_lifetime = 1.0
 process_material = SubResource("ParticleProcessMaterial_6l1uj")
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Blood" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("3_tohpi")
+
+[node name="Jump" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_j0n07")
+
+[node name="ChainSaw" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("5_l5f43")
+
+[node name="CoinThrow" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("6_nsjf2")
+
+[node name="Explosion" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("7_k8108")
+
+[node name="FistReload" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("8_eji56")
+
+[node name="FootstepHeavy1" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("9_be5op")
+
+[node name="FootstepHeavy2" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("10_uxbqn")
+
+[node name="FootstepHeavy3" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("11_gewhk")
+
+[node name="FootstepHeavy4" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("12_rbd1f")
+
+[node name="HpGet" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("13_sc4nj")
+
+[node name="Fist" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("14_ld72d")
+
+[node name="LandingHeavy" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("15_geoio")
+
+[node name="Landing" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("16_l5f43")
+
+[node name="PunchProjectile" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("16_ccm32")
+
+[node name="RailcannonFire" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("17_wjm0j")
+
+[node name="Ricochet" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("18_ce7b5")
+
+[node name="Shoot" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("19_lirlu")
+
+[node name="Shotgunpump" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("20_1indm")
+
+[node name="SteampunkWeapons-Shotgun2-Shot-03" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("21_r0wpg")
+
+[node name="Twirling" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("22_ppv6p")
+
+[node name="Wallcling" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("23_xf0sj")
+
+[node name="Whoosh" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("24_wukho")
+volume_db = -20.0
+
+[node name="Dash" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("25_j0n07")

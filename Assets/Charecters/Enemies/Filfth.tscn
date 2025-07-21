@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5d4fn0wxn6dv"]
+[gd_scene load_steps=5 format=3 uid="uid://c5d4fn0wxn6dv"]
 
 [ext_resource type="Texture2D" uid="uid://3jfeapdc5d4o" path="res://Assets/Charecters/Enemies/Filfth_Head.png" id="1_ac6wb"]
 [ext_resource type="Texture2D" uid="uid://cqyiwwydwx2bw" path="res://Assets/Charecters/Enemies/Filfth_Body.png" id="2_2lhpe"]
+[ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="3_jeplr"]
+[ext_resource type="AudioStream" uid="uid://cu7mpqbw0ldif" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death.wav" id="4_utjuk"]
 
 [node name="Enemy_Preset" type="Node2D"]
 z_index = -2
@@ -57,3 +59,11 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 1, 0, 1)
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="ZombieWeakDeathReverse" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("3_jeplr")
+
+[node name="ZombieWeakDeath" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_utjuk")

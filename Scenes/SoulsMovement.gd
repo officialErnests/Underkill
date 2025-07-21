@@ -14,7 +14,7 @@ const DASH_SPEED = 750
 const DASH_LENGHT = 0.2
 const WALL_COYOTE = 0.2
 const SLIDE_SPEED = 300
-
+const FOOTSTEP_TIME = 0.25
 
 #env variables
 const DAMPENING = Vector2(0.85, 0.97)
@@ -62,7 +62,11 @@ var wallNormal = Vector2(0,0)
 var groundslamRecoveryTime = 0
 var groundslamDistance = 0
 var slideSpeed = 0
+var footstepTimer = 0
+var footstepsAudio = []
 
+func _ready() -> void:
+	footstepsAudio = [$Audio/FootstepHeavy1,$Audio/FootstepHeavy2,$Audio/FootstepHeavy3,$Audio/FootstepHeavy4]
 
 func Movement(delta) -> void:
 	var input_direction = Input.get_vector("Left", "Right", "Up", "Down")
@@ -108,16 +112,19 @@ func ResetWallJumps() -> void:
 
 func DetGroundslam() -> void:
 	if Input.is_action_just_pressed("Slide"):
+
 		groundslamDistance = 0
 		PlrMovement = EnumPlrMovement.GROUND_SLAM
 
 func DetJump() -> void:
 	if Input.is_action_just_pressed("Jump"):
+		$Audio/Jump.play()
 		velocity.y -= JUMP_HEIGHT
 		PlrMovement = EnumPlrMovement.AIRBORNE
 
 func DetWallJump() -> void:
 	if Input.is_action_just_pressed("Jump") and walljumps > 0:
+		$Audio/Jump.play()
 		walljumps -= 1
 		velocity.y = -JUMP_HEIGHT
 		velocity.x = wallNormal.x * SPEED
@@ -129,6 +136,7 @@ func DetWallJump() -> void:
 
 func DetDash() -> void:
 	if Input.is_action_just_pressed("Dash") and energy >= 1:
+		$Audio/Dash.play()
 		dashingTime = DASH_LENGHT
 		energy -= 1
 		PlrMovement = EnumPlrMovement.DASH
@@ -136,6 +144,7 @@ func DetDash() -> void:
 func DetDashJump() -> void:
 	if CurentPlayersState == EnumPlayerStates.GROUND and Input.is_action_just_pressed("Jump") and energy >= 1:
 		energy -= 2
+		$Audio/Jump.play()
 		PlrMovement = EnumPlrMovement.AIRBORNE
 		velocity = Vector2(DASH_SPEED * lastDirection * 2, -JUMP_HEIGHT)
 		$Slide2.emitting = false
@@ -161,6 +170,7 @@ func GroundSlam(delta) -> void:
 	$Slide2.process_material.direction = Vector3(0,-5,0)
 
 func GroundSlamRecoveryStart() -> void:
+	$Audio/LandingHeavy.play()
 	groundslamRecoveryTime = GROUNDSLAM_RECOVERY
 
 func GroundSlamRecovery(delta) -> void:
@@ -173,6 +183,7 @@ func GroundSlamRecovery(delta) -> void:
 
 func DetGroundSlamJump() -> void:
 	if Input.is_action_just_pressed("Jump"):
+		$Audio/Jump.play()
 		velocity.y = -min(groundslamDistance, GROUNDSLAM_DISTANCE) * GROUNDSLAM_SPEED / GROUNDSLAM_DISTANCE
 		groundslamRecoveryTime = 0
 		PlrMovement = EnumPlrMovement.AIRBORNE
@@ -196,6 +207,17 @@ func Slide() -> void:
 		PlrMovement = EnumPlrMovement.GROUNDED
 	if Input.is_action_just_released("Slide"):
 		PlrMovement = EnumPlrMovement.GROUNDED
+
+func UpdateSfx(delta) -> void:
+	footstepTimer -= delta
+	if PlrMovement == EnumPlrMovement.GROUNDED and abs(velocity.x) > 150 and footstepTimer <= 0:
+		footstepTimer = FOOTSTEP_TIME
+		footstepsAudio.pick_random().play()
+	if PlrMovement == EnumPlrMovement.WALL_SLIDE or PlrMovement == EnumPlrMovement.SLIDE:
+		if not $Audio/Wallcling.playing: $Audio/Wallcling.play()
+	else:
+		if $Audio/Wallcling.playing: $Audio/Wallcling.stop()
+
 
 func get_input(delta) -> void:
 	#such a good practice ;-; i ain't regreting this not at all ToT
@@ -244,6 +266,7 @@ func get_input(delta) -> void:
 
 	if PlrMovement == EnumPlrMovement.AIRBORNE and CurentPlayersState == EnumPlayerStates.GROUND:
 		PlrMovement = EnumPlrMovement.GROUNDED
+		$Audio/Landing.play()
 	
 	if PlrMovement == EnumPlrMovement.AIRBORNE and CurentPlayersState == EnumPlayerStates.WALL:
 		if velocity.y > 0:
@@ -351,3 +374,4 @@ func _physics_process(delta):
 		$Slide2.emitting = false
 		scale = Vector2(1,1)
 		position = MenuPos
+	UpdateSfx(delta)

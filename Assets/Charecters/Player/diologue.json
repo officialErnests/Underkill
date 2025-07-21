@@ -12,7 +12,7 @@
                 "Succes" : {
                     "Effect" : "Shot",
                     "Damage" : 1,
-                    "Cooldown" : 2,
+                    "Cooldown" : 0,
                     "Explosion" : 0,
                     "Messages" : [
                         ["You hit the enemy",

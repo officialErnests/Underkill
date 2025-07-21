@@ -1,6 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgx6315w71rys"]
+[gd_scene load_steps=14 format=3 uid="uid://dgx6315w71rys"]
 
 [ext_resource type="Script" uid="uid://bmv437lyk08ew" path="res://Assets/Cages/Cage.gd" id="1_40a3g"]
+[ext_resource type="AudioStream" uid="uid://c8lw8c7vysb0f" path="res://Assets/UltrakillAudio/Enviroment/CrowdApplause.wav" id="2_w2xfl"]
+[ext_resource type="AudioStream" uid="uid://dujhh1ifi1hbs" path="res://Assets/UltrakillAudio/Shop/G4F SFX11 - ExoInterface - Cursor Click 25.wav" id="2_yttkx"]
+[ext_resource type="AudioStream" uid="uid://cqphj033twb0g" path="res://Assets/UltrakillAudio/Shop/UI Startup.wav" id="3_5j26k"]
+[ext_resource type="AudioStream" uid="uid://bocqqurne2ke6" path="res://Assets/UltrakillAudio/Enviroment/CrowdCheerLong.wav" id="3_7fkbj"]
+[ext_resource type="AudioStream" uid="uid://cetdwe21s0exj" path="res://Assets/UltrakillAudio/Shop/UI_Mechanical_Error_11_FX_01.wav" id="4_6aqxd"]
+[ext_resource type="AudioStream" uid="uid://retkjna575ch" path="res://Assets/UltrakillAudio/Shop/Accent,Interface,UI,Alert,Resonant,Waver.wav" id="5_w2xfl"]
+[ext_resource type="AudioStream" uid="uid://bv6mqtovahfoj" path="res://Assets/UltrakillAudio/Shop/Accent,interface,ui,alert,clean,metallic,double,fast.wav" id="6_7fkbj"]
+[ext_resource type="AudioStream" uid="uid://coveiwt5e2fnw" path="res://Assets/UltrakillAudio/Shop/G4F SFX11 - ExoInterface - Window Close - Short 16.wav" id="7_5j26k"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_40a3g"]
 b = Vector2(0, 0)
@@ -52,3 +60,35 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.784314)
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="CrowdApplause" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("2_w2xfl")
+
+[node name="CrowdCheerLong" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("3_7fkbj")
+
+[node name="Switch" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("2_yttkx")
+volume_db = -10.0
+
+[node name="Start" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("3_5j26k")
+volume_db = -10.0
+
+[node name="Cant" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_6aqxd")
+volume_db = -10.0
+
+[node name="Pick" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("5_w2xfl")
+volume_db = -20.0
+
+[node name="Back" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("6_7fkbj")
+volume_db = -20.0
+
+[node name="Exit" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("7_5j26k")
+volume_db = -10.0

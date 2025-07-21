@@ -5,6 +5,8 @@
         "Body" : "Filfth",
         "Points" : 10,
         "Width" : 50,
+        "DmgAudio" : "ZombieWeakDeathReverse",
+        "DeathAudio" : "ZombieWeakDeath",
         "Intro" : [
             ["Filfth jumps in!"],
             ["Filfth TRIES TO BITE YOUR TOES",

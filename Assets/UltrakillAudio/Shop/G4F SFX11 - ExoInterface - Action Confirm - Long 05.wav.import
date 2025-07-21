@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://2gu4a4k10hg6"
+path="res://.godot/imported/G4F SFX11 - ExoInterface - Action Confirm - Long 05.wav-6dbb95b045fe80983fb29db3bd57e428.sample"
+
+[deps]
+
+source_file="res://Assets/UltrakillAudio/Shop/G4F SFX11 - ExoInterface - Action Confirm - Long 05.wav"
+dest_files=["res://.godot/imported/G4F SFX11 - ExoInterface - Action Confirm - Long 05.wav-6dbb95b045fe80983fb29db3bd57e428.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

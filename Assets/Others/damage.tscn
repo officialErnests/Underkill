@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://4qcmikcx2v6b"]
+
+[ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="1_td3gp"]
+
+[node name="Damage" type="Label"]
+texture_filter = 1
+offset_right = 14.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("1_td3gp")
+text = "10"

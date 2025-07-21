@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dg65p32tyjakl"
+path="res://.godot/imported/Zombie Weak Death Reverse.wav-b7edf36e5fb808d2e3c29d66f281558f.sample"
+
+[deps]
+
+source_file="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav"
+dest_files=["res://.godot/imported/Zombie Weak Death Reverse.wav-b7edf36e5fb808d2e3c29d66f281558f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
