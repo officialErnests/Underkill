@@ -88,5 +88,12 @@ Small update just added some dmg numbers and bugfixed a litle
 > - Dmg numbers
 > - Can't skip kill anim <;
 ### AUDIO ~1h 48m -25h 3m
-Added some ultrakill sounds so you don't have to sit in silence.
+Added some ultrakill sounds so you don't have to sit in silence. Menu navigation sounds.
 > - Audio
+## Day 7
+### FULL AUDIO ~2h 58m -28h 1m
+Added selection sounds, and making enemies screem when shot, and adding equipment sounds. Started making enemy attacks and planing out how to make it modular and so on so it is more flexable than hardcoded.
+> - More menu audio
+> - Attack system planed out
+> - Enemies heads are animated :D
+>> Also found out bug where the visuals glitch out when you try to use mercy but go back and use attack (it's only visual so no biggie, but i aint fixing it till adding more wepons)

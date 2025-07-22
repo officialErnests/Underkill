@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://hovoq1lx3htq"]
+
+[ext_resource type="Texture2D" uid="uid://baj3p0ros4ee2" path="res://Assets/Charecters/Enemies/Fiflt_Head.png" id="1_qw2b7"]
+[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="2_d868c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdeyq"]
+atlas = ExtResource("1_qw2b7")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbpax"]
+atlas = ExtResource("1_qw2b7")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_houi4"]
+atlas = ExtResource("1_qw2b7")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqvwi"]
+atlas = ExtResource("1_qw2b7")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d868c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rdeyq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbpax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_houi4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqvwi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d868c"]
+radius = 13.0
+height = 44.0
+
+[node name="FilfthBullet" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-2, 0)
+sprite_frames = SubResource("SpriteFrames_d868c")
+frame_progress = 0.446389
+script = ExtResource("2_d868c")
+
+[node name="Collision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+shape = SubResource("CapsuleShape2D_d868c")

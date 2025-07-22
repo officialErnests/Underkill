@@ -1,0 +1,15 @@
+Used in enemies json
+
+[locations]
+\-  Outside -> Outside the frame random
+
+Bounce
+|-  Spawn location      -> where to spawn [locations]
+|-  Spawn amount        -> How many to Spawn
+|-  Spawn delay         -> Delay between each spawn
+|-  Projectile speed    -> Speed of said projectiles
+\-  Degre               -> spawn degree
+|| TimeToSpawn
+|| SpawnedProj
+|-| projGameobj
+|-| velocity

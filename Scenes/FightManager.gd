@@ -14,6 +14,10 @@ var mainControl : Control
 var label : Label
 var cage : Node2D
 var player : CharacterBody2D
+var health : Label
+var bullets : Node2D
+
+const PLAYERS_MAXHP = 100
 
 var disableNoMercy = false
 var StageSet = StageSets.PLAYER_MENU
@@ -36,6 +40,12 @@ var fightRewards = 0
 var attackRange = 0
 var dmgNumbers = []
 var skipAttack = false
+var optOptionsLast = 0
+var advOptionsLast = 0
+var playersHealth = 100
+# 0-enemy 1-attack
+var attacks = []
+var attackCage = "CAGE_SMALL"
 
 var LoadedWepons = []
 var WeponRecharge = []
@@ -64,13 +74,25 @@ var weponMap = []
 var CageSizes = {
 	"DEFAULT_CAGE" = [
 		Vector2(0,70),
-		Vector2(287,140)],
+		Vector2(400,140)],
 	"DIOLOGUE_CAGE" = [
-		Vector2(0,90),
+		Vector2(0,50),
 		Vector2(300,170)],
+	"CAGE_EXSMALL" = [
+		Vector2(0,0),
+		Vector2(250,20)
+	],
 	"CAGE_SMALL" = [
 		Vector2(0,0),
-		Vector2(200,200)
+		Vector2(250,150)
+	],
+	"CAGE_MED" = [
+		Vector2(0,0),
+		Vector2(400,250)
+	],
+	"CAGE_BIG" = [
+		Vector2(0,0),
+		Vector2(600,290)
 	]
 }
 
@@ -107,8 +129,10 @@ func _ready() -> void:
 	mainControl = $Camera2D/Control
 	cage = $Cage
 	label = $Camera2D/Text
+	health = $Camera2D/Health
 	player = $CharacterBody2D
 	enemySpawnNode = $Enemies
+	bullets = $Bullets
 
 	# label.Text = ""
 
@@ -129,7 +153,9 @@ func _ready() -> void:
 				"PosOffset" = 0,
 				"Points" = enemies_json[enemy]["Points"],
 				"Offset" = offseter,
-				"DmgAudio" = enemies_json[enemy]["DmgAudio"]
+				"DmgAudio" = enemies_json[enemy]["DmgAudio"],
+				"DeathAudio" = enemies_json[enemy]["DeathAudio"],
+				"Attacks" = enemies_json[enemy]["Attacks"]
 			}
 			offseter += 0.3
 			enemySpawnNode.add_child(TempEnemy["Body"])
@@ -386,6 +412,7 @@ func SetCageSize(cageSet) -> void:
 func UpdateGuiPos() -> void:
 	mainControl.position = cage.CagePosition - cage.CageSize / 2 * Vector2(1,-1)
 	label.position = cage.CagePosition - cage.CageSize / 2 + Vector2(10,5)
+	health.position = cage.CagePosition - cage.CageSize / 2 * Vector2(-1,-1) + Vector2(-10 - 640,5)
 
 func DisplayDiologue(diol) -> void:
 	diolString = ""
@@ -438,6 +465,7 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 	var higindex = 0
 	var nextTunr = 0
 	var removeIndex = []
+	var zIndex = 0
 	for enemy in allEnemies:
 		if not higlightEnemy or abs(indx - advOptions) > attackRange: 
 			indx += 1
@@ -447,6 +475,8 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 		if attackStage == 0:#Show health
 			enemy["Body"].get_child(2).modulate = Color(1,1,1,attackAnim/0.3)
 			attackDebounce.append(true)
+			enemy["Body"].get_child(2).z_index = zIndex
+			zIndex += 5
 			if attackAnim > 0.3:
 				attackStage += 1
 		if attackStage == 1: #Anticipation
@@ -462,17 +492,18 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 				loadedEffect[higindex].scale = Vector2.ONE * 5
 				loadedEffect[higindex].visible = false
 				add_child(loadedEffect[higindex])
-				print(loadedEffect)
 			if attackAnim > 1.5:
 				attackStage += 1
 		if attackStage == 3:#dmg
 			if attackDebounce[higindex]:
 				enemy["Health"] -= attackDmg
+				enemy["Body"].get_child(3).get_node(enemy["DmgAudio"]).play()
 				attackDebounce[higindex] = false
 				var tempDmgNumber = dmgNumb.instantiate()
 				add_child(tempDmgNumber)
+				tempDmgNumber.text = str(attackDmg)
 				tempDmgNumber.position = enemy["Body"].position + enemy["Body"].get_child(0).position + enemy["Body"].get_child(0).get_child(0).position
-				dmgNumbers.append([tempDmgNumber, Vector2(randf_range(-100,100),-200),3])
+				dmgNumbers.append([tempDmgNumber, Vector2(randf_range(-200,200),-200),3])
 			ofsseter = pow(((2.6-attackAnim)*2),2) * 10
 			if attackAnim > 2.5:
 				if attackDebounce.size() > 0:
@@ -480,8 +511,9 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 				attackStage += 1
 		if attackStage == 4:#check if enemy died and play animation
 			if enemy["Health"] < 0:
+				enemy["Body"].get_child(3).get_node(enemy["DeathAudio"]).play()
 				fightRewards += enemy["Points"]
-				var random1 = randf_range(-100,100)
+				var random1 = randf_range(-00,100)
 				allKilled.append([enemy["Body"],[Vector2(random1,randf_range(-400,-200)),random1/100],[Vector2(-random1,randf_range(-400,-200)),-random1/100]])
 				removeIndex.append(indx)
 				enemyIntro = ENEMY_INTRO
@@ -544,6 +576,7 @@ func PlayerMenuMove() -> void:
 		if PlayerSel == PlayerPos.Nomercy:
 			PlayerSel = PlayerPos.Kill
 	if Input.is_action_just_pressed("Left"):
+		playSwitch()
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel - 1 as PlayerPos
 		if PlayerSel < 0:
@@ -552,12 +585,16 @@ func PlayerMenuMove() -> void:
 			else:
 				PlayerSel = 3 as PlayerPos
 	if Input.is_action_just_pressed("Right"):
+		playSwitch()
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel + 1 as PlayerPos
 		if disableNoMercy and PlayerSel > 2:
 			PlayerSel = 0 as PlayerPos
 		elif not disableNoMercy and PlayerSel > 3:
 			PlayerSel = 0 as PlayerPos
+
+func playSwitch() -> void:
+	$Cage/Audio/Switch.play()
 
 func SwitchGui(Battle) -> void:
 	match Battle:
@@ -605,8 +642,8 @@ func updateDmgNumbers(delta) -> void:
 		else:
 			dmgNumber[0].position += dmgNumber[1] * delta
 			dmgNumber[1] += Vector2(0,98) * delta * 10
-			if dmgNumber[0].position.y >= -50:
-				dmgNumber[0].position.y = -50
+			if dmgNumber[0].position.y >= 160:
+				dmgNumber[0].position.y = 160
 				dmgNumber[1].x *= 0.8
 				dmgNumber[1].y *= -0.8
 			dmgNumber[2] -= delta
@@ -620,6 +657,12 @@ func GetStageChange() -> bool:
 	return LastStage != StageSet
 
 func playAudio() -> void:
+	if advOptions != advOptionsLast:
+		$Cage/Audio/Switch.play()
+		advOptionsLast = advOptions
+	if optOptions != optOptions:
+		$Cage/Audio/Switch.play()
+		optOptionsLast = optOptions
 	if GetStageChange():
 		if LastStage == StageSets.ENEMY_ATTACK:
 			$Cage/Audio/Start.play()
@@ -637,10 +680,59 @@ func playAudio() -> void:
 				$Cage/Audio/Pick.play()
 		if LastStage == StageSets.PLAYER_ATTACK:
 			if StageSet == StageSets.VICTORY:
+				$Camera2D/Health.visible = false
 				$Cage/Audio/CrowdApplause.play()
 				$Cage/Audio/CrowdCheerLong.play()
 			else:
 				$Cage/Audio/Exit.play()
+
+func attackInit() -> void:
+	return
+	attackCage = ["CAGE_SMALL"].pick_random()
+	#then add attack randomizer
+	#add so other enemies try to attack aswell (3 enemies at max maybe)
+	for indx in range(min(3, allEnemies.size())):
+		var pickedEnemy = allEnemies.pick_random()
+		#idk how but somehow the bullet is loaded in Realy 0 clue
+		var pickedAttack = pickedEnemy["Attacks"][attackCage].pick_random()
+		var transfer = {
+			"Projectile" = load(enemi_folder_path + pickedAttack["Projectile"] + ".tscn").instantiate(),
+			"DamageMul" = pickedAttack["DamageMul"],
+			"AttackPatern" = pickedAttack["AttackPatern"],
+			"AttackPaternsParams" = pickedAttack["AttackPaternsParams"],
+			"AttackPluses" = []
+		}
+		bullets.add_child(transfer["Projectile"])
+		transfer["Projectile"].position = Vector2(500,0)
+		attackPlusesInit(pickedAttack)
+		attacks.append([pickedEnemy, transfer])
+
+func attackPlusesInit(pickedAttack) -> void:
+	return
+	match pickedAttack["AttackPatern"]:
+		"Bounce":
+			pickedAttack["AttackPluses"] = {
+				"TimeToSpawn" = 0,
+				"SpawnedProj" = [{
+					"projGameObj" = null,
+					"velocity" = Vector2.ZERO
+				}]
+			}
+		
+
+func atacksUpdater(delta) -> void:
+	return
+	for attack in attacks:
+		match attack["AttackPatern"]:
+			"Bounce":
+				if enemyIntro > 0:
+					if attack["AttackPluses"]["TimeToSpawn"]:
+						pass
+				elif StageSet == StageSets.ENEMY_ATTACK:
+					pass
+				else:
+					pass
+
 
 func _physics_process(delta):
 	updateDmgNumbers(delta)
@@ -662,7 +754,6 @@ func _physics_process(delta):
 		if GetStageChange():
 			SwitchGui(GuiStages.OPTIONS)
 			var randEn = allEnemies.pick_random()
-			print(randEn["DmgAudio"])
 			if LastStage != StageSets.PLAYER_MENU:
 				randEn["Body"].get_child(3).get_node(randEn["DmgAudio"]).play()
 				DisplayDiologue(randEn["Intro"].pick_random())
@@ -690,6 +781,7 @@ func _physics_process(delta):
 				SwitchGui(GuiStages.BATTLE)
 				RecenterPlayer()
 				higlightEnemy = false
+				attackInit()
 			UpdateCage(delta, "CAGE_SMALL", 5)
 			enemyIntro -= delta
 			enemyAttack = 0
@@ -702,6 +794,7 @@ func _physics_process(delta):
 						WeponRecharge[wep] -= 1
 			enemyAttack += delta
 			SetCageSize("CAGE_SMALL")
+		atacksUpdater(delta)
 	elif  StageSet == StageSets.VICTORY:
 		UpdateCage(delta, "DIOLOGUE_CAGE", 2)
 		SwitchGui(GuiStages.TEXT)

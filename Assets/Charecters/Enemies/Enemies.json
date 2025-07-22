@@ -29,6 +29,15 @@
                 "He runs into wall",
                 "He do be playing blind"]
             ]
+        },
+        "Attacks" : {
+            "CAGE_SMALL" : [{
+                "Projectile" : "filfth_bullet",
+                "DamageMul" : 1,
+                "AttackPatern" : "Bounce",
+                "AttackPaternsParams" : ["Outside", 1, 0, 10, 45]
+                }
+            ]
         }
     }
 }

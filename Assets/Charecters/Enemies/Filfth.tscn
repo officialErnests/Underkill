@@ -1,20 +1,58 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5d4fn0wxn6dv"]
+[gd_scene load_steps=11 format=3 uid="uid://c5d4fn0wxn6dv"]
 
-[ext_resource type="Texture2D" uid="uid://3jfeapdc5d4o" path="res://Assets/Charecters/Enemies/Filfth_Head.png" id="1_ac6wb"]
+[ext_resource type="Texture2D" uid="uid://baj3p0ros4ee2" path="res://Assets/Charecters/Enemies/Fiflt_Head.png" id="1_ac6wb"]
 [ext_resource type="Texture2D" uid="uid://cqyiwwydwx2bw" path="res://Assets/Charecters/Enemies/Filfth_Body.png" id="2_2lhpe"]
+[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="2_utjuk"]
 [ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="3_jeplr"]
 [ext_resource type="AudioStream" uid="uid://cu7mpqbw0ldif" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death.wav" id="4_utjuk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdeyq"]
+atlas = ExtResource("1_ac6wb")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbpax"]
+atlas = ExtResource("1_ac6wb")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_houi4"]
+atlas = ExtResource("1_ac6wb")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqvwi"]
+atlas = ExtResource("1_ac6wb")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_slfsn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rdeyq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbpax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_houi4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqvwi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
 
 [node name="Enemy_Preset" type="Node2D"]
 z_index = -2
 
 [node name="HeadAttach" type="Node2D" parent="."]
 
-[node name="Head" type="Sprite2D" parent="HeadAttach"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HeadAttach"]
 texture_filter = 1
-position = Vector2(2, -101)
+position = Vector2(0, -97)
 scale = Vector2(0.7, 0.7)
-texture = ExtResource("1_ac6wb")
+sprite_frames = SubResource("SpriteFrames_slfsn")
+script = ExtResource("2_utjuk")
 
 [node name="BodyAttach" type="Node2D" parent="."]
 
@@ -48,6 +86,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25, 0.25, 0.25, 1)

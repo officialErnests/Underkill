@@ -92,3 +92,4 @@ volume_db = -20.0
 [node name="Exit" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("7_5j26k")
 volume_db = -10.0
+pitch_scale = 2.0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3jfeapdc5d4o"
-path="res://.godot/imported/Filfth_Head.png-4d0a1029944a5c02203c93f42cd169cd.ctex"
+uid="uid://baj3p0ros4ee2"
+path="res://.godot/imported/Fiflt_Head.png-c7f9680dbd7a527c8537294f4f5d24bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Charecters/Enemies/Filfth_Head.png"
-dest_files=["res://.godot/imported/Filfth_Head.png-4d0a1029944a5c02203c93f42cd169cd.ctex"]
+source_file="res://Assets/Charecters/Enemies/Fiflt_Head.png"
+dest_files=["res://.godot/imported/Fiflt_Head.png-c7f9680dbd7a527c8537294f4f5d24bb.ctex"]
 
 [params]
 
