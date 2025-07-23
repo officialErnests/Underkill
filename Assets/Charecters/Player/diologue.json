@@ -8,11 +8,12 @@
             "Flags" : "Do this whenever 1 - can't unequip until another 1 is equuiped or smthing like that",
             "KILL" : {
                 "Name" : "Smack 'em",
-                "Chance" : 100,
+                "Chance" : 90,
                 "Succes" : {
                     "Effect" : "Shot",
+                    "Heal" : 10,
                     "Damage" : 1,
-                    "Cooldown" : 0,
+                    "Cooldown" : 1,
                     "Explosion" : 0,
                     "Messages" : [
                         ["You hit the enemy",
@@ -24,13 +25,13 @@
                 },
                 "Fail" : {
                     "Effect" : "Shot",
+                    "Heal" : 0,
                     "Damage" : 0,
                     "Explosion" : 0,
                     "Cooldown" : 1,
                     "Messages" : [
-                        ["Litraly how is this posible???",
-                        "No realy, *sigh* just say this to n0o0b",
-                        "Punch failed err 5612"]
+                        ["You punch",
+                        "And miss XD"]
                     ],
                     "Dev msg" : "Maybe some day this will lead to bug :P"
                 }
@@ -39,6 +40,7 @@
                 "Chance" : 50,
                 "Name" : "Parry",
                 "Succes" : {
+                    "Effect" : "Shot", 
                     "Heal" : 100,
                     "Damage" : 4,
                     "Cooldown" : 5,
@@ -58,6 +60,7 @@
                     ]
                 },
                 "Fail" : {
+                    "Effect" : "Shot",
                     "Heal" : 0,
                     "Damage" : 0,
                     "Cooldown" : 3,

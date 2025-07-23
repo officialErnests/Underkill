@@ -12,7 +12,10 @@ It's an unedrtale un ultrakill mashup
 - Json and it quirks
 - Best programming practices around enum (honestly its funny how i didn't use these XD)
 
+
+
 # Updates
+> For ysws program you need to subtract 8h 28m from any time since this was started before that :D
 ## Day 1
 ### Initial commit
 Was used to create githubvs page and it is sorta started since it was a project of mine before
@@ -50,7 +53,6 @@ Player stuck in menue since haven't done fully the switch XD
 > - Now you can move left and right in diologue and select with w and s
 ## -- YSWS --
 Joined YSWS programm (Jumpstart) soo i have 20 hrs top go :)
-> at 8h 28m so have to subtract that from YSWS time :<
 ### Fight Update ~3h 2m - 11h 17m
 Still working on main script, added turns(somewhat) and made cage more animated, now you can spawn inf enemies and they are auto placed :D
 > - Filfth sprites :D
@@ -97,3 +99,8 @@ Added selection sounds, and making enemies screem when shot, and adding equipmen
 > - Attack system planed out
 > - Enemies heads are animated :D
 >> Also found out bug where the visuals glitch out when you try to use mercy but go back and use attack (it's only visual so no biggie, but i aint fixing it till adding more wepons)
+## Day 8
+### Projectiles ~2h 2m -30h 3m
+Made some changes to no mercy and how cooldowns work... will work on enemies now (the hardest part, wish me luck sine i will need it XD) as i have started creating enemy projectile script :D
+> - added randomized enemies
+> - added infinite play to see how many p you can get

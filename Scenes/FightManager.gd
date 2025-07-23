@@ -19,7 +19,6 @@ var bullets : Node2D
 
 const PLAYERS_MAXHP = 100
 
-var disableNoMercy = false
 var StageSet = StageSets.PLAYER_MENU
 var optionSize = 1
 var time = 0
@@ -42,10 +41,12 @@ var dmgNumbers = []
 var skipAttack = false
 var optOptionsLast = 0
 var advOptionsLast = 0
-var playersHealth = 100
+var playersHealth = PLAYERS_MAXHP
+var playersPrevHp = PLAYERS_MAXHP
 # 0-enemy 1-attack
 var attacks = []
 var attackCage = "CAGE_SMALL"
+var nomercyColldown = 0
 
 var LoadedWepons = []
 var WeponRecharge = []
@@ -107,19 +108,16 @@ var ADVANCED_OFFSET = Vector2(5,5)
 var advOptions = 0
 var optOptions = 0
 
-var attackEnemies = [
-	"Filfth",
-	"Filfth",
-	"Filfth",
-	"Filfth",
-	"Filfth"
+var enemies = [
+	["Filfth",1]
 ]
+var attackEnemies = []
 var allEnemies = []
 
 var ENEMY_INTRO = 1.0
 var enemyIntro = 0
 var enemyAttack = 0
-var ENEMY_ATTACK_TIME = 10
+var ENEMY_ATTACK_TIME = 1 #TODO 10
 var PlayerSel = PlayerPos.Kill
 var attackDebounce = []
 
@@ -135,8 +133,51 @@ func _ready() -> void:
 	bullets = $Bullets
 
 	# label.Text = ""
+	Restart()
 
 
+
+func Restart():
+	StageSet = StageSets.PLAYER_MENU
+	optionSize = 1
+	time = 0
+	LastStage = StageSets.ENEMY_ATTACK
+	first = false
+	higlightEnemy = false
+	offsety = 0
+	textReaveal = 0
+	prevText = ""
+	diolString = ""
+	attackStage = 7
+	attackAnim = 0
+	attackDmg = 0
+	loadEffectString = ""
+	loadedEffect = []
+	# allKilled = []
+	# fightRewards = 0
+	attackRange = 0
+	# dmgNumbers = []
+	skipAttack = false
+	optOptionsLast = 0
+	advOptionsLast = 0
+	advOptions = 0
+	optOptions = 0
+	attackEnemies = []
+	ENEMY_INTRO = 1.0
+	enemyIntro = 0
+	enemyAttack = 0
+	ENEMY_ATTACK_TIME = 10
+	PlayerSel = PlayerPos.Kill
+	attackDebounce = []
+	LoadedWepons = []
+	WeponRecharge = []
+	# playersHealth = 100
+	var difficulty = fightRewards / 10.0
+	for i in range(7):
+		var randomEnemy = enemies.pick_random()
+		attackEnemies.append(randomEnemy[0])
+		difficulty -= randomEnemy[1]
+		if difficulty <= 0 or attackEnemies.size() >= 7: break
 	var totalWidth = 0
 	var offseter = 0
 	for enemy in attackEnemies:
@@ -194,6 +235,8 @@ func get_input(_delta) -> void:
 			InputAdvancedOptions()
 		StageSets.OPTION_TEXT:
 			InputOptionText()
+		StageSets.VICTORY:
+			InputVictory()
 
 
 func InputPlayerMenu() -> void:
@@ -280,7 +323,10 @@ func InputOptionText() -> void:
 				DisplayDiologue(finalStr)
 			else:
 				if Input.is_action_just_pressed("Jump"):
-					StageSet = StageSets.PLAYER_ATTACK
+					if WeponRecharge[weponMap[optOptions]] <= 0:
+						StageSet = StageSets.PLAYER_ATTACK
+					else:
+						$Cage/Audio/Cant.play()
 			if Input.is_action_just_pressed("Dash"):
 				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.Bep:
@@ -310,7 +356,10 @@ func InputOptionText() -> void:
 				DisplayDiologue(finalStr)
 			else:
 				if Input.is_action_just_pressed("Jump"):
-					StageSet = StageSets.PLAYER_ATTACK
+					if WeponRecharge[weponMap[optOptions]] <= 0:
+						StageSet = StageSets.PLAYER_ATTACK
+					else:
+						$Cage/Audio/Cant.play()
 			if Input.is_action_just_pressed("Dash"):
 				StageSet = StageSets.ADVANCED_OPTIONS
 		PlayerPos.Nomercy:
@@ -318,10 +367,16 @@ func InputOptionText() -> void:
 			attackRange = 1
 			if GetStageChange():
 				higlightEnemy = true
-				DisplayDiologue(["You are really sure?"])
+				if nomercyColldown > 0:
+					DisplayDiologue(["[" + "#".repeat(nomercyColldown) + "]" + "RAILCANNON"])
+				else:
+					DisplayDiologue(["RAILCANNON"])
 			else:
 				if Input.is_action_just_pressed("Jump"):
-					StageSet = StageSets.PLAYER_ATTACK
+					if nomercyColldown <= 0:
+						StageSet = StageSets.PLAYER_ATTACK
+					else:
+						$Cage/Audio/Cant.play()
 			if Input.is_action_just_pressed("Dash"):
 				StageSet = StageSets.ADVANCED_OPTIONS
 		_:
@@ -376,20 +431,27 @@ func InputPlayerAttack() -> void:
 						if LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Chance"] >= randf_range(0,100):
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Cooldown"]
+							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Effect"])
+							playersHealth += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Heal"], PLAYERS_MAXHP - playersHealth)
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Cooldown"]
+							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Effect"])
+							playersHealth += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Heal"], PLAYERS_MAXHP - playersHealth)
 			PlayerPos.Nomercy:
 				if GetStageChange():
 					attack(8, 1, "Shot")
-					mainControl.get_child(1).get_child(3).modulate = Color(0.1,0.1,1.1)
-					disableNoMercy = true
+					nomercyColldown = 10
 					DisplayDiologue(["YOU USED THE RAILCANON",
 									"ENEMIES ARE TOTALY VAPORIZED",
 									"you can say they got...",
 									"railed",
 									"I'm so funny ;u;"])
 
+func InputVictory():
+	if not GetStageChange():
+		if Input.is_action_just_pressed("Jump"):
+			Restart()
 
 func attack(dmg, attRange, effectName) -> void:
 	attackDmg = dmg
@@ -571,26 +633,17 @@ func RecenterPlayer() -> void:
 func PlayerMenuMove() -> void:
 	player.MenuPos = mainControl.position + OFFSETS[PlayerSel as int]
 	mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1, 0)
-	if disableNoMercy:
-		mainControl.get_child(1).get_child(3).modulate = Color(0.5,0.5,0.5)
-		if PlayerSel == PlayerPos.Nomercy:
-			PlayerSel = PlayerPos.Kill
 	if Input.is_action_just_pressed("Left"):
 		playSwitch()
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel - 1 as PlayerPos
 		if PlayerSel < 0:
-			if disableNoMercy:
-				PlayerSel = 2 as PlayerPos
-			else:
-				PlayerSel = 3 as PlayerPos
+			PlayerSel = 3 as PlayerPos
 	if Input.is_action_just_pressed("Right"):
 		playSwitch()
 		mainControl.get_child(1).get_child(PlayerSel as int).modulate = Color(1,1,1)
 		PlayerSel = PlayerSel + 1 as PlayerPos
-		if disableNoMercy and PlayerSel > 2:
-			PlayerSel = 0 as PlayerPos
-		elif not disableNoMercy and PlayerSel > 3:
+		if PlayerSel > 3:
 			PlayerSel = 0 as PlayerPos
 
 func playSwitch() -> void:
@@ -687,7 +740,6 @@ func playAudio() -> void:
 				$Cage/Audio/Exit.play()
 
 func attackInit() -> void:
-	return
 	attackCage = ["CAGE_SMALL"].pick_random()
 	#then add attack randomizer
 	#add so other enemies try to attack aswell (3 enemies at max maybe)
@@ -700,44 +752,70 @@ func attackInit() -> void:
 			"DamageMul" = pickedAttack["DamageMul"],
 			"AttackPatern" = pickedAttack["AttackPatern"],
 			"AttackPaternsParams" = pickedAttack["AttackPaternsParams"],
+			"ProjectileSize" = Vector2.ZERO,
 			"AttackPluses" = []
 		}
+		transfer["ProjectileSize"] = transfer["Projectile"].get_meta("BulletSize")
 		bullets.add_child(transfer["Projectile"])
 		transfer["Projectile"].position = Vector2(500,0)
-		attackPlusesInit(pickedAttack)
+		transfer["AttackPluses"] = attackPlusesInit(pickedAttack)
 		attacks.append([pickedEnemy, transfer])
 
-func attackPlusesInit(pickedAttack) -> void:
-	return
+func attackPlusesInit(pickedAttack):
+	var pickedAttackTemp = {}
 	match pickedAttack["AttackPatern"]:
 		"Bounce":
-			pickedAttack["AttackPluses"] = {
+			pickedAttackTemp = {
 				"TimeToSpawn" = 0,
+				"SpawnedObj" = 0,
 				"SpawnedProj" = [{
-					"projGameObj" = null,
-					"velocity" = Vector2.ZERO
+					"ProjNode" = null,
+					"Veloc" = Vector2.ZERO
 				}]
 			}
+			pickedAttackTemp["SpawnedProj"] = []
+	return pickedAttackTemp
 		
-
 func atacksUpdater(delta) -> void:
-	return
-	for attack in attacks:
-		match attack["AttackPatern"]:
+	for iterEnemy in attacks:
+		var iterAttack = iterEnemy[1]
+		match iterAttack["AttackPatern"]:
 			"Bounce":
 				if enemyIntro > 0:
-					if attack["AttackPluses"]["TimeToSpawn"]:
-						pass
+					if iterAttack["AttackPluses"]["TimeToSpawn"] <= 0:
+						iterAttack["AttackPluses"]["TimeToSpawn"] = iterAttack["AttackPaternsParams"][2]
+						iterAttack["AttackPluses"]["SpawnedObj"] += 1
+						if iterAttack["AttackPluses"]["SpawnedObj"] <= iterAttack["AttackPaternParams"][1]:
+							match iterAttack["AttackPatern"]:
+								"Bounce":
+									match iterAttack["AttackPaternsParams"][0]:
+										"OutsideL":
+											var tempVel = iterAttack["AttackPaternParams"][4].pick_random()
+											iterAttack["AttackPluses"]["SpawnedProj"].append({
+												"ProjNode" = iterAttack["Projectile"].instantiate(),
+												"Veloc" = Vector2(tempVel[0], tempVel[1])
+											})
+											var tempBullet = iterAttack["ĀttackPluses"]["SpawnedProj"][iterAttack["ĀttackPluses"]["SpawnedProj"].size()-1]
+											tempBullet.position = cage.CagePosition - cage.CageSize
+											
+					else:
+						iterAttack["AttackPluses"]["TimeToSpawn"] -= delta
 				elif StageSet == StageSets.ENEMY_ATTACK:
 					pass
 				else:
 					pass
 
 
+
+func UpdatePlayersHp(delta):
+	playersPrevHp += (playersHealth-playersPrevHp) * delta
+	health.text = str(floori(playersPrevHp)) + "/" + str(PLAYERS_MAXHP)
+
 func _physics_process(delta):
 	updateDmgNumbers(delta)
 	UpdtDiologue(delta)
 	UpdateDeadEnemies(delta)
+	UpdatePlayersHp(delta)
 	playAudio()
 	attackAnim += delta
 	time += delta
@@ -802,4 +880,6 @@ func _physics_process(delta):
 		if GetStageChange():
 			DisplayDiologue(["CONGRATS",
 			"YOU DEFEATED ALL MONSTERS",
-			"YOU EARNED - " + str(fightRewards as int) + "P"])
+			"YOU HAVE EARNED - " + str(fightRewards as int) + "P"])
+		else:
+			get_input(delta)
