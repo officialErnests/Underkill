@@ -104,3 +104,10 @@ Added selection sounds, and making enemies screem when shot, and adding equipmen
 Made some changes to no mercy and how cooldowns work... will work on enemies now (the hardest part, wish me luck sine i will need it XD) as i have started creating enemy projectile script :D
 > - added randomized enemies
 > - added infinite play to see how many p you can get
+## Day 9
+#### Made 'em work ~1h 13m -31h 16m
+Projectiles now work... well don't dmg but work XD
+Next up so they dmg player
+> - Added projectile spawninng
+> - Projectile movement
+> - Projectile despawning

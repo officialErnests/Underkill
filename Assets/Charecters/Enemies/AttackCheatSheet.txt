@@ -9,9 +9,11 @@ Json params (start params):
 |-1  Spawn amount        -> How many to Spawn
 |-2  Spawn delay         -> Delay between each spawn
 |-3  Projectile speed    -> Speed of said projectiles
-\-4  []Degre             -> spawn degree
+|-4  []Degre             -> spawn degree
+\-5  Spawn timer         -> how long it takes to spawn in
 
 |0| TimeToSpawn
 |1| SpawnedProj
 |2-0| projGameobj
 |2-1| velocity
+|2-2| spawn timer
