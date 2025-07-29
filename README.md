@@ -105,9 +105,16 @@ Made some changes to no mercy and how cooldowns work... will work on enemies now
 > - added randomized enemies
 > - added infinite play to see how many p you can get
 ## Day 9
-#### Made 'em work ~1h 13m -31h 16m
+### Made 'em work ~1h 13m -31h 16m
 Projectiles now work... well don't dmg but work XD
 Next up so they dmg player
 > - Added projectile spawninng
 > - Projectile movement
 > - Projectile despawning
+### Damage and respawn ~1h 20m -32h 36m
+You die now... i made quick death screen just so you can retry, but now you can take dmg and die from it
+Dashing makes you invincible :P
+> - More filfth attack apterns
+> - Bullets deal dmg
+> - you can heal from parry
+> - You can die real quickly XD

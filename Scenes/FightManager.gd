@@ -17,8 +17,6 @@ var player : CharacterBody2D
 var health : Label
 var bullets : Node2D
 
-const PLAYERS_MAXHP = 100
-
 var StageSet = StageSets.PLAYER_MENU
 var optionSize = 1
 var time = 0
@@ -41,8 +39,7 @@ var dmgNumbers = []
 var skipAttack = false
 var optOptionsLast = 0
 var advOptionsLast = 0
-var playersHealth = PLAYERS_MAXHP
-var playersPrevHp = PLAYERS_MAXHP
+var playersPrevHp = Global.player_health
 # 0-enemy 1-attack
 var attacks = []
 var attackCage = "CAGE_SMALL"
@@ -172,12 +169,12 @@ func Restart():
 	LoadedWepons = []
 	WeponRecharge = []
 	# playersHealth = 100
-	var difficulty = fightRewards / 10.0
+	var difficulty = fightRewards / 10.0 + 3
 	for i in range(7):
 		var randomEnemy = enemies.pick_random()
 		attackEnemies.append(randomEnemy[0])
 		difficulty -= randomEnemy[1]
-		if difficulty <= 0 or attackEnemies.size() >= 7: break
+		if difficulty <= 0: break
 	var totalWidth = 0
 	var offseter = 0
 	for enemy in attackEnemies:
@@ -432,12 +429,12 @@ func InputPlayerAttack() -> void:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Cooldown"]
 							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Effect"])
-							playersHealth += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Heal"], PLAYERS_MAXHP - playersHealth)
+							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Heal"], Global.player_max_health - Global.player_health)
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Cooldown"]
 							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Effect"])
-							playersHealth += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Heal"], PLAYERS_MAXHP - playersHealth)
+							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Heal"], Global.player_max_health - Global.player_health)
 			PlayerPos.Nomercy:
 				if GetStageChange():
 					attack(8, 1, "Shot")
@@ -738,7 +735,8 @@ func playAudio() -> void:
 				$Cage/Audio/CrowdCheerLong.play()
 			else:
 				$Cage/Audio/Exit.play()
-
+		if StageSet != StageSets.VICTORY:
+			$Camera2D/Health.visible = true
 func attackInit() -> void:
 	attackCage = ["CAGE_SMALL"].pick_random()
 	#then add attack randomizer
@@ -749,7 +747,7 @@ func attackInit() -> void:
 		var pickedAttack = pickedEnemy["Attacks"][attackCage].pick_random()
 		var transfer = {
 			"Projectile" = load(enemi_folder_path + pickedAttack["Projectile"] + ".tscn"),
-			"DamageMul" = pickedAttack["DamageMul"],
+			"Damage" = pickedAttack["Damage"],
 			"AttackPatern" = pickedAttack["AttackPatern"],
 			"AttackPaternsParams" = pickedAttack["AttackPaternsParams"],
 			"ProjectileSize" = Vector2.ZERO,
@@ -797,6 +795,7 @@ func atacksUpdater(delta) -> void:
 											})
 											var tempBullet = iterAttack["AttackPluses"]["SpawnedProj"][iterAttack["AttackPluses"]["SpawnedProj"].size()-1]["ProjNode"]
 											tempBullet.modulate = Color(1,1,1,0)
+											tempBullet.damage = iterAttack["Damage"]
 											bullets.add_child(tempBullet)
 											var position_posabilities = [
 												cage.CagePosition.x + (cage.CageSize.x / 2 + iterAttack["ProjectileSize"].x) * random_numbers.pick_random(),
@@ -816,9 +815,10 @@ func atacksUpdater(delta) -> void:
 						if projectile_iter["SpawnTimer"] >= 0:
 							projectile_iter["SpawnTimer"] -= delta
 							projectile_iter["ProjNode"].modulate = Color(1,1,1,1 - projectile_iter["SpawnTimer"] / iterAttack["AttackPaternsParams"][5])
+							if projectile_iter["SpawnTimer"] <= 0:
+								projectile_iter["ProjNode"].modulate = Color(1,1,1,1)
 						else:
-							projectile_iter["ProjNode"].modulate = Color(1,1,1,1)
-							projectile_iter["ProjNode"].position += projectile_iter["Veloc"]
+							projectile_iter["ProjNode"].position += projectile_iter["Veloc"] * iterAttack["AttackPaternsParams"][3]
 							if projectile_iter["ProjNode"].position.y + iterAttack["ProjectileSize"].y > cage.position.y + cage.CageSize.y / 2 and projectile_iter["Veloc"].y > 0:
 								projectile_iter["Veloc"].y *= -1
 							if projectile_iter["ProjNode"].position.y - iterAttack["ProjectileSize"].y < cage.position.y - cage.CageSize.y / 2 and projectile_iter["Veloc"].y < 0:
@@ -843,8 +843,8 @@ func attacks_delete_em() -> void:
 		
 
 func UpdatePlayersHp(delta):
-	playersPrevHp += (playersHealth-playersPrevHp) * delta
-	health.text = str(floori(playersPrevHp)) + "/" + str(PLAYERS_MAXHP)
+	playersPrevHp += (Global.player_health-playersPrevHp) * delta
+	health.text = str(floori(playersPrevHp)) + "/" + str(Global.player_max_health)
 
 func _physics_process(delta):
 	updateDmgNumbers(delta)
@@ -919,3 +919,6 @@ func _physics_process(delta):
 			"YOU HAVE EARNED - " + str(fightRewards as int) + "P"])
 		else:
 			get_input(delta)
+	if Global.player_health <= 0:
+		Global.score = fightRewards
+		get_tree().change_scene_to_file("res://Scenes/death.tscn")

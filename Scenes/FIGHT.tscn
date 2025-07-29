@@ -171,7 +171,7 @@ text = "100/100
 "
 horizontal_alignment = 2
 
-[node name="CharacterBody2D" parent="." node_paths=PackedStringArray("StageGui") instance=ExtResource("2_yp62b")]
+[node name="CharacterBody2D" parent="." node_paths=PackedStringArray("StageGui") groups=["Player"] instance=ExtResource("2_yp62b")]
 position = Vector2(0, 50)
 StageGui = NodePath("../Camera2D/Control")
 

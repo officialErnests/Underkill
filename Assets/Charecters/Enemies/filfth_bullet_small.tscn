@@ -1,24 +1,24 @@
-[gd_scene load_steps=11 format=3 uid="uid://hovoq1lx3htq"]
+[gd_scene load_steps=11 format=3 uid="uid://7ejlrl3x53e4"]
 
-[ext_resource type="Script" uid="uid://hhlyuittsvb7" path="res://Scripts/colliding_enemy.gd" id="1_chjly"]
-[ext_resource type="Texture2D" uid="uid://baj3p0ros4ee2" path="res://Assets/Charecters/Enemies/Fiflt_Head.png" id="1_qw2b7"]
-[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="2_d868c"]
-[ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="4_apvlw"]
+[ext_resource type="Script" uid="uid://hhlyuittsvb7" path="res://Scripts/colliding_enemy.gd" id="1_8012e"]
+[ext_resource type="Texture2D" uid="uid://baj3p0ros4ee2" path="res://Assets/Charecters/Enemies/Fiflt_Head.png" id="2_msqse"]
+[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="3_h5qqc"]
+[ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="4_jhblf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rdeyq"]
-atlas = ExtResource("1_qw2b7")
+atlas = ExtResource("2_msqse")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dbpax"]
-atlas = ExtResource("1_qw2b7")
+atlas = ExtResource("2_msqse")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_houi4"]
-atlas = ExtResource("1_qw2b7")
+atlas = ExtResource("2_msqse")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tqvwi"]
-atlas = ExtResource("1_qw2b7")
+atlas = ExtResource("2_msqse")
 region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_d868c"]
@@ -42,19 +42,20 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d868c"]
-radius = 16.0
-height = 54.0
+radius = 9.0
+height = 26.0
 
 [node name="FilfthBullet" type="Node2D"]
-script = ExtResource("1_chjly")
-metadata/BulletSize = Vector2(25, 30)
+script = ExtResource("1_8012e")
+metadata/BulletSize = Vector2(10, 15)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(-2, 0)
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_d868c")
 frame_progress = 0.446389
-script = ExtResource("2_d868c")
+script = ExtResource("3_h5qqc")
 
 [node name="Collision" type="Area2D" parent="."]
 
@@ -63,7 +64,7 @@ position = Vector2(-1, 1)
 shape = SubResource("CapsuleShape2D_d868c")
 
 [node name="Audio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_apvlw")
+stream = ExtResource("4_jhblf")
 
 [connection signal="body_entered" from="Collision" to="." method="_on_collision_body_entered"]
 [connection signal="body_exited" from="Collision" to="." method="_on_collision_body_exited"]

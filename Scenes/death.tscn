@@ -1,0 +1,139 @@
+[gd_scene load_steps=5 format=3 uid="uid://dck187883vfng"]
+
+[ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="1_g62mh"]
+[ext_resource type="Script" uid="uid://bnj8x5gd5xddu" path="res://Scripts/death.gd" id="1_mna5k"]
+[ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="3_rsl6c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4dtd"]
+shader = ExtResource("3_rsl6c")
+
+[node name="Death" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mna5k")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -60
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0.188235, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="."]
+z_index = -50
+material = SubResource("ShaderMaterial_u4dtd")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -20.0
+offset_right = 160.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="."]
+z_index = -50
+material = SubResource("ShaderMaterial_u4dtd")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -70.0
+offset_right = 210.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+z_index = -50
+material = SubResource("ShaderMaterial_u4dtd")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -120.0
+offset_right = 260.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+z_index = -50
+material = SubResource("ShaderMaterial_u4dtd")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 1)
+
+[node name="Health" type="Label" parent="."]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -640.0
+offset_bottom = 360.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("1_g62mh")
+theme_override_font_sizes/font_size = 30
+text = "YOU DIED
+FINAL SCORE:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -87.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_g62mh")
+theme_override_font_sizes/font_size = 41
+text = "Respawn?"
+
+[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]

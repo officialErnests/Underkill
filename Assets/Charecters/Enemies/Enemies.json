@@ -1,7 +1,7 @@
 {
     "Filfth" : {
         "Health" : 0.5,
-        "Damage" : 1.5,
+        "Damage" : 30,
         "Body" : "Filfth",
         "Points" : 10,
         "Width" : 50,
@@ -33,9 +33,15 @@
         "Attacks" : {
             "CAGE_SMALL" : [{
                 "Projectile" : "filfth_bullet",
-                "DamageMul" : 1,
+                "Damage" : 30,
                 "AttackPatern" : "Bounce",
-                "AttackPaternsParams" : ["OutsideL", 1, 0.5, 20, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
+                "AttackPaternsParams" : ["OutsideL", 1, 0.5, 1, [[1,1],[1,-1],[-1,1],[-1,-1]], 1]
+                },
+                {
+                "Projectile" : "filfth_bullet_small",
+                "Damage" : 10,
+                "AttackPatern" : "Bounce",
+                "AttackPaternsParams" : ["OutsideL", 2, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
                 }
             ]
         }

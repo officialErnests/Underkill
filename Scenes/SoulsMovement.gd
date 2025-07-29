@@ -16,6 +16,7 @@ const WALL_COYOTE = 0.2
 const SLIDE_SPEED = 300
 const FOOTSTEP_TIME = 0.25
 
+
 #env variables
 const DAMPENING = Vector2(0.85, 0.97)
 
@@ -67,6 +68,13 @@ var footstepsAudio = []
 
 func _ready() -> void:
 	footstepsAudio = [$Audio/FootstepHeavy1,$Audio/FootstepHeavy2,$Audio/FootstepHeavy3,$Audio/FootstepHeavy4]
+
+
+func damage(in_dmg) -> bool:
+	if PlrMovement == EnumPlrMovement.DASH:
+		return false
+	Global.player_health -= in_dmg
+	return true
 
 func Movement(delta) -> void:
 	var input_direction = Input.get_vector("Left", "Right", "Up", "Down")
