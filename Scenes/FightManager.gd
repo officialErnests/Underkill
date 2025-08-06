@@ -106,7 +106,8 @@ var advOptions = 0
 var optOptions = 0
 
 var enemies = [
-	["Filfth",1]
+	["Filfth",1],
+	["Stray",2]
 ]
 var attackEnemies = []
 var allEnemies = []
@@ -771,6 +772,17 @@ func attackPlusesInit(pickedAttack):
 				}]
 			}
 			pickedAttackTemp["SpawnedProj"] = []
+		"Trogh":
+			pickedAttackTemp = {
+				"TimeToSpawn" = 0,
+				"SpawnedObj" = 0,
+				"SpawnedProj" = [{
+					"ProjNode" = null,
+					"Veloc" = Vector2.ZERO,
+					"SpawnTimer" = 0
+				}]
+			}
+			pickedAttackTemp["SpawnedProj"] = []
 	return pickedAttackTemp
 		
 func atacksUpdater(delta) -> void:
@@ -783,32 +795,30 @@ func atacksUpdater(delta) -> void:
 						iterAttack["AttackPluses"]["TimeToSpawn"] = iterAttack["AttackPaternsParams"][2]
 						iterAttack["AttackPluses"]["SpawnedObj"] += 1
 						if iterAttack["AttackPluses"]["SpawnedObj"] <= iterAttack["AttackPaternsParams"][1]:
-							match iterAttack["AttackPatern"]:
-								"Bounce":
-									match iterAttack["AttackPaternsParams"][0]:
-										"OutsideL":
-											var tempVel = iterAttack["AttackPaternsParams"][4].pick_random()
-											iterAttack["AttackPluses"]["SpawnedProj"].append({
-												"ProjNode" = iterAttack["Projectile"].instantiate(),
-												"Veloc" = Vector2(tempVel[0], tempVel[1]),
-												"SpawnTimer" = iterAttack["AttackPaternsParams"][5]
-											})
-											var tempBullet = iterAttack["AttackPluses"]["SpawnedProj"][iterAttack["AttackPluses"]["SpawnedProj"].size()-1]["ProjNode"]
-											tempBullet.modulate = Color(1,1,1,0)
-											tempBullet.damage = iterAttack["Damage"]
-											bullets.add_child(tempBullet)
-											var position_posabilities = [
-												cage.CagePosition.x + (cage.CageSize.x / 2 + iterAttack["ProjectileSize"].x) * random_numbers.pick_random(),
-												cage.CagePosition.y + (cage.CageSize.y / 2 + iterAttack["ProjectileSize"].y) * random_numbers.pick_random(),
-												randf_range(cage.CagePosition.y - cage.CageSize.y / 2, cage.CagePosition.y + cage.CageSize.y / 2),
-												randf_range(cage.CagePosition.x - cage.CageSize.x / 2, cage.CagePosition.x + cage.CageSize.x / 2)
-											]
-											var random_direction = randi_range(0,1)
-											if random_direction == 0:
-												tempBullet.position = Vector2(position_posabilities[random_direction], position_posabilities[random_direction + 2])
-											else:
-												tempBullet.position = Vector2(position_posabilities[random_direction + 2], position_posabilities[random_direction])
-											# tempBullet.position = Vector2.ZERO
+							match iterAttack["AttackPaternsParams"][0]:
+								"OutsideL":
+									var tempVel = iterAttack["AttackPaternsParams"][4].pick_random()
+									iterAttack["AttackPluses"]["SpawnedProj"].append({
+										"ProjNode" = iterAttack["Projectile"].instantiate(),
+										"Veloc" = Vector2(tempVel[0], tempVel[1]),
+										"SpawnTimer" = iterAttack["AttackPaternsParams"][5]
+									})
+									var tempBullet = iterAttack["AttackPluses"]["SpawnedProj"][iterAttack["AttackPluses"]["SpawnedProj"].size()-1]["ProjNode"]
+									tempBullet.modulate = Color(1,1,1,0)
+									tempBullet.damage = iterAttack["Damage"]
+									bullets.add_child(tempBullet)
+									var position_posabilities = [
+										cage.CagePosition.x + (cage.CageSize.x / 2 + iterAttack["ProjectileSize"].x) * random_numbers.pick_random(),
+										cage.CagePosition.y + (cage.CageSize.y / 2 + iterAttack["ProjectileSize"].y) * random_numbers.pick_random(),
+										randf_range(cage.CagePosition.y - cage.CageSize.y / 2, cage.CagePosition.y + cage.CageSize.y / 2),
+										randf_range(cage.CagePosition.x - cage.CageSize.x / 2, cage.CagePosition.x + cage.CageSize.x / 2)
+									]
+									var random_direction = randi_range(0,1)
+									if random_direction == 0:
+										tempBullet.position = Vector2(position_posabilities[random_direction], position_posabilities[random_direction + 2])
+									else:
+										tempBullet.position = Vector2(position_posabilities[random_direction + 2], position_posabilities[random_direction])
+									# tempBullet.position = Vector2.ZERO
 					else:
 						iterAttack["AttackPluses"]["TimeToSpawn"] -= delta
 					for projectile_iter in iterAttack["AttackPluses"]["SpawnedProj"]:
@@ -831,12 +841,54 @@ func atacksUpdater(delta) -> void:
 					pass
 				else:
 					pass
+			"Trogh":
+				if enemyIntro <= 0:
+					if iterAttack["AttackPluses"]["TimeToSpawn"] <= 0:
+						iterAttack["AttackPluses"]["TimeToSpawn"] = iterAttack["AttackPaternsParams"][2]
+						iterAttack["AttackPluses"]["SpawnedObj"] += 1
+						if iterAttack["AttackPluses"]["SpawnedObj"] <= iterAttack["AttackPaternsParams"][1]:
+							match iterAttack["AttackPaternsParams"][0]:
+								"Sides":
+									iterAttack["AttackPluses"]["SpawnedProj"].append({
+										"ProjNode" = iterAttack["Projectile"].instantiate(),
+										"Veloc" = Vector2(0,0),
+										"SpawnTimer" = iterAttack["AttackPaternsParams"][5]
+									})
+									var tempBullet = iterAttack["AttackPluses"]["SpawnedProj"][iterAttack["AttackPluses"]["SpawnedProj"].size()-1]["ProjNode"]
+									tempBullet.modulate = Color(1,1,1,0)
+									tempBullet.damage = iterAttack["Damage"]
+									bullets.add_child(tempBullet)
+									var position_posabilities = [
+										cage.CagePosition.x + (cage.CageSize.x / 2 + iterAttack["ProjectileSize"].x) * random_numbers.pick_random(),
+										randf_range(cage.CagePosition.y - cage.CageSize.y / 2, cage.CagePosition.y + cage.CageSize.y / 2),
+									]
+									tempBullet.position = Vector2(position_posabilities[0], position_posabilities[1])
+									var tempVel = iterAttack["AttackPaternsParams"][4][0 if tempBullet.position.x < 0 else 1]
+									iterAttack["AttackPluses"]["SpawnedProj"][iterAttack["AttackPluses"]["SpawnedProj"].size()-1]["Veloc"] = Vector2(tempVel[0],tempVel[1])
+									# tempBullet.position = Vector2.ZERO
+					else:
+						iterAttack["AttackPluses"]["TimeToSpawn"] -= delta
+					for projectile_iter in iterAttack["AttackPluses"]["SpawnedProj"]:
+						if projectile_iter["SpawnTimer"] >= 0:
+							projectile_iter["SpawnTimer"] -= delta
+							projectile_iter["ProjNode"].modulate = Color(1,1,1,1 - projectile_iter["SpawnTimer"] / iterAttack["AttackPaternsParams"][5])
+							if projectile_iter["SpawnTimer"] <= 0:
+								projectile_iter["ProjNode"].modulate = Color(1,1,1,1)
+						else:
+							projectile_iter["ProjNode"].position += projectile_iter["Veloc"] * iterAttack["AttackPaternsParams"][3]
+				elif StageSet == StageSets.ENEMY_ATTACK:
+					pass
+				else:
+					pass
 
 func attacks_delete_em() -> void:
 	for iterEnemy in attacks:
 		var iterAttack = iterEnemy[1]
 		match iterAttack["AttackPatern"]:
 			"Bounce":
+				for projectile_iter in iterAttack["AttackPluses"]["SpawnedProj"]:
+					projectile_iter["ProjNode"].queue_free()
+			"Trogh":
 				for projectile_iter in iterAttack["AttackPluses"]["SpawnedProj"]:
 					projectile_iter["ProjNode"].queue_free()
 	attacks.clear()

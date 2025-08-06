@@ -106,6 +106,8 @@ color = Color(0, 1, 0, 1)
 
 [node name="ZombieWeakDeathReverse" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("3_jeplr")
+volume_db = -10.0
 
 [node name="ZombieWeakDeath" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("4_utjuk")
+volume_db = -10.0

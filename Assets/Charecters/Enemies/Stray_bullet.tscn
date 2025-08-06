@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://bmtpv575oky1q"]
+
+[ext_resource type="Script" uid="uid://hhlyuittsvb7" path="res://Scripts/colliding_enemy.gd" id="1_uu31q"]
+[ext_resource type="Texture2D" uid="uid://dvot04ei67xfy" path="res://Assets/Charecters/Enemies/Stray_Bullet.png" id="2_uu31q"]
+[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="3_y5j0m"]
+[ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="4_suwn4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j6sws"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_uu31q")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y5j0m"]
+radius = 8.0
+
+[node name="FilfthBullet" type="Node2D"]
+script = ExtResource("1_uu31q")
+metadata/BulletSize = Vector2(10, 10)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_j6sws")
+animation = &"new_animation"
+script = ExtResource("3_y5j0m")
+
+[node name="Collision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+shape = SubResource("CircleShape2D_y5j0m")
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_suwn4")
+
+[connection signal="body_entered" from="Collision" to="." method="_on_collision_body_entered"]
+[connection signal="body_exited" from="Collision" to="." method="_on_collision_body_exited"]

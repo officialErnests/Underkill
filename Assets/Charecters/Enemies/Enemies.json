@@ -14,10 +14,10 @@
         ],
         "Interactions" : {
             "Check" : [
-                ["Filfth - ATK 1.5 HP 0.5",
+                ["Filfth - ATK 30 HP 0.5",
                 "Seems hungry, hungry boi",
                 "Filfth - \"RAGHhhh...\""],
-                ["Filfth - ATK 1.5 HP 0.5",
+                ["Filfth - ATK 30 HP 0.5",
                 "\"RAGH ARGH RAWR\" - Filfth",
                 "Truly wise words"]
             ],
@@ -42,6 +42,44 @@
                 "Damage" : 10,
                 "AttackPatern" : "Bounce",
                 "AttackPaternsParams" : ["OutsideL", 2, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
+                }
+            ]
+        }
+    },
+    "Stray" : {
+        "Health" : 1.5,
+        "Damage" : 25,
+        "Body" : "Stray",
+        "Points" : 20,
+        "Width" : 50,
+        "DmgAudio" : "ZombieDamage1",
+        "DeathAudio" : "ZombieDeath",
+        "Intro" : [
+            ["Stray, spawns in"],
+            ["As stray wobles in"]
+        ],
+        "Interactions" : {
+            "Check" : [
+                ["Stray - ATK 25 HP 1.5",
+                "They look angry"],
+                ["Stray - ATK 25 HP 1.5",
+                "As they woble around the room",
+                "Untill they face you"]
+            ],
+            "Aproach them" : [
+                ["As you aproach them",
+                "They looks fearless",
+                "Just standing there"],
+                ["As you walk towards",
+                "They fling projctile"]
+            ]
+        },
+        "Attacks" : {
+            "CAGE_SMALL" : [{
+                "Projectile" : "Stray_bullet",
+                "Damage" : 20,
+                "AttackPatern" : "Trogh",
+                "AttackPaternsParams" : ["Sides", 10, 0.5, 1, [[1,0],[-1,0]], 1]
                 }
             ]
         }
