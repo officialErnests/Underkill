@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://bhmhv40xumskq"]
+
+[ext_resource type="Texture2D" uid="uid://cibogg1wd54vt" path="res://Assets/Charecters/Player/Effects/Miss.png" id="1_svvpc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efura"]
+atlas = ExtResource("1_svvpc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwcq2"]
+atlas = ExtResource("1_svvpc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ar6ov"]
+atlas = ExtResource("1_svvpc")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqv1w"]
+atlas = ExtResource("1_svvpc")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cchuk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_efura")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwcq2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ar6ov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqv1w")
+}],
+"loop": false,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="HitSprite" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_cchuk")
+speed_scale = 2.0

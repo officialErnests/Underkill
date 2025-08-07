@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://gpxxxc6b4w0m"]
+
+[ext_resource type="Texture2D" uid="uid://bklad78ltjot4" path="res://Assets/Charecters/Player/Effects/Smack.png" id="1_4jfj2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hyoqh"]
+atlas = ExtResource("1_4jfj2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xod8n"]
+atlas = ExtResource("1_4jfj2")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xkobw"]
+atlas = ExtResource("1_4jfj2")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldar2"]
+atlas = ExtResource("1_4jfj2")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cchuk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hyoqh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xod8n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xkobw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldar2")
+}],
+"loop": false,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="HitSprite" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_cchuk")
+speed_scale = 2.0

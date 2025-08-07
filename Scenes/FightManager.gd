@@ -401,7 +401,7 @@ func InputPlayerAttack() -> void:
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Cooldown"]
-							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
+							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Effect"])
 				else:
 					if skipAttack:
 						if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
@@ -417,9 +417,10 @@ func InputPlayerAttack() -> void:
 					DisplayDiologue(allEnemies[advOptions]["Interactions"][allEnemies[advOptions]["Interactions"].keys()[optOptions]].pick_random())
 			PlayerPos.SSStyle:
 				if not GetStageChange(): #debounces jump input
-					if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
-							StageSet = StageSets.ENEMY_ATTACK
-							enemyIntro = ENEMY_INTRO
+					# if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
+					# 		StageSet = StageSets.ENEMY_ATTACK
+					# 		enemyIntro = ENEMY_INTRO
+					pass
 				else:
 					if WeponRecharge[weponMap[optOptions]] > 0:
 						DisplayDiologue(["As you tried that", 

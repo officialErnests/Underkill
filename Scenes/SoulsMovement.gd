@@ -20,14 +20,6 @@ const FOOTSTEP_TIME = 0.25
 #env variables
 const DAMPENING = Vector2(0.85, 0.97)
 
-#states
-var Sliding = false
-var CanMove = true
-var Airborne = false
-var OnWall = false
-var JumpStorage = false
-var Invincible = false
-
 @export var StageGui: Control
 @export var PlayerDoge: bool
 @export var MenuPos: Vector2

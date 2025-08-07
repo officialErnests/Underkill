@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dck187883vfng"]
+[gd_scene load_steps=6 format=3 uid="uid://dck187883vfng"]
 
 [ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="1_g62mh"]
 [ext_resource type="Script" uid="uid://bnj8x5gd5xddu" path="res://Scripts/death.gd" id="1_mna5k"]
 [ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="3_rsl6c"]
+[ext_resource type="AudioStream" uid="uid://ds4r0kq75ryju" path="res://Assets/CoolAudio/Sad.wav" id="4_u4dtd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u4dtd"]
 shader = ExtResource("3_rsl6c")
@@ -105,16 +106,24 @@ grow_vertical = 2
 pivot_offset = Vector2(0.5, 0.5)
 color = Color(0, 0, 0, 1)
 
-[node name="Health" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -59.5
+offset_right = 77.0
+offset_bottom = 59.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Health" type="Label" parent="VBoxContainer"]
 z_index = 1
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -640.0
-offset_bottom = 360.0
-grow_horizontal = 0
+layout_mode = 2
 theme_override_fonts/font = ExtResource("1_g62mh")
 theme_override_font_sizes/font_size = 30
 text = "YOU DIED
@@ -122,18 +131,25 @@ FINAL SCORE:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="Respawn" type="Button" parent="VBoxContainer"]
 z_index = 2
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -87.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 2
 theme_override_fonts/font = ExtResource("1_g62mh")
 theme_override_font_sizes/font_size = 41
 text = "Respawn?"
 
-[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
+[node name="Give_Up" type="Button" parent="VBoxContainer"]
+z_index = 2
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_g62mh")
+theme_override_font_sizes/font_size = 41
+text = "Give up"
+
+[node name="Sad" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_u4dtd")
+volume_db = -5.0
+autoplay = true
+stream_paused = true
+
+[connection signal="button_up" from="VBoxContainer/Respawn" to="." method="_on_button_button_up"]
+[connection signal="button_up" from="VBoxContainer/Give_Up" to="." method="_on_give_up_button_up"]

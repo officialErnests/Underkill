@@ -24,8 +24,7 @@ z_index = -2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HeadAttach"]
 texture_filter = 1
-position = Vector2(1, -93)
-scale = Vector2(0.5, 0.5)
+position = Vector2(0, -134)
 sprite_frames = SubResource("SpriteFrames_wodjr")
 script = ExtResource("2_n7p36")
 
@@ -34,8 +33,8 @@ script = ExtResource("2_n7p36")
 [node name="Body" type="Sprite2D" parent="BodyAttach"]
 z_index = -1
 texture_filter = 1
-position = Vector2(1, -48)
-scale = Vector2(1.4, 1.4)
+position = Vector2(0, -64)
+scale = Vector2(2, 2)
 texture = ExtResource("3_n7p36")
 
 [node name="Health" type="Node2D" parent="."]

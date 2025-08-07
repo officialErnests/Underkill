@@ -16,7 +16,7 @@
             "Check" : [
                 ["Filfth - ATK 30 HP 0.5",
                 "Seems hungry, hungry boi",
-                "Filfth - \"RAGHhhh...\""],
+            "Filfth - \"RAGHhhh...\""],
                 ["Filfth - ATK 30 HP 0.5",
                 "\"RAGH ARGH RAWR\" - Filfth",
                 "Truly wise words"]
@@ -35,13 +35,13 @@
                 "Projectile" : "filfth_bullet",
                 "Damage" : 30,
                 "AttackPatern" : "Bounce",
-                "AttackPaternsParams" : ["OutsideL", 1, 0.5, 1, [[1,1],[1,-1],[-1,1],[-1,-1]], 1]
+                "AttackPaternsParams" : ["OutsideL", 1, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 1]
                 },
                 {
                 "Projectile" : "filfth_bullet_small",
                 "Damage" : 10,
                 "AttackPatern" : "Bounce",
-                "AttackPaternsParams" : ["OutsideL", 2, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
+                "AttackPaternsParams" : ["OutsideL", 2, 0.5, 3, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
                 }
             ]
         }
@@ -79,7 +79,7 @@
                 "Projectile" : "Stray_bullet",
                 "Damage" : 20,
                 "AttackPatern" : "Trogh",
-                "AttackPaternsParams" : ["Sides", 10, 0.5, 1, [[1,0],[-1,0]], 1]
+                "AttackPaternsParams" : ["Sides", 100, 0.5, 5, [[1,0],[-1,0]], 1]
                 }
             ]
         }
