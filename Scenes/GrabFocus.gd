@@ -1,9 +1,15 @@
 extends Button
 
+@export var FIRST : bool
+@export var SWITCH_SCENE : PackedScene
+
 func _ready() -> void:
-    grab_focus()
+    if FIRST: grab_focus()
+    button_up.connect(func_button_up)
 
-
-func _on_button_up() -> void:
-    get_tree().change_scene_to_file("res://Scenes/FIGHT.tscn")
+func func_button_up() -> void:
+    if not SWITCH_SCENE: 
+        get_tree().quit()
+        return
+    get_tree().change_scene_to_packed(SWITCH_SCENE)
 

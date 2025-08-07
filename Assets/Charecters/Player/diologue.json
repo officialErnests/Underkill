@@ -1,6 +1,7 @@
 {
     "Equiped" : [
-        "Punch"
+        "Punch",
+        "Piercer"
     ],
     "Items" : {
         "Punch" : {
@@ -14,7 +15,7 @@
                     "Heal" : 10,
                     "Damage" : 1,
                     "Cooldown" : 1,
-                    "Explosion" : 0,
+                    "Explosion" : 10,
                     "Messages" : [
                         ["You hit the enemy",
                         "It seems the enemy was hurt"],
@@ -34,6 +35,74 @@
                         "And miss XD"]
                     ],
                     "Dev msg" : "Maybe some day this will lead to bug :P"
+                }
+            },
+            "SSSTYLE" : {
+                "Chance" : 50,
+                "Name" : "Parry",
+                "Succes" : {
+                    "Effect" : "Smack", 
+                    "Heal" : 100,
+                    "Damage" : 4,
+                    "Cooldown" : 5,
+                    "Explosion" : 1,
+                    "Messages" : [
+                        ["As you saw yellow spark",
+                        "You parried that"],
+                        ["+Parry"],
+                        ["i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it",
+                        "i'm not gonna sugarcoat it"],
+                        ["\"Get parried\"",
+                        "(in ones and zeros since ur a machine, duh)",
+                        "As you parry'em"]
+                    ]
+                },
+                "Fail" : {
+                    "Effect" : "Miss",
+                    "Heal" : 0,
+                    "Damage" : 0,
+                    "Cooldown" : 3,
+                    "Explosion" : 0,
+                    "Messages" : [
+                        ["As you saw yellow spark",
+                        "You wimped and ducked",
+                        "Coward..."],
+                        ["As you saw them attack",
+                        "You forgot how to Parry"],
+                        ["You missed the parry",
+                        "I call dibs"]
+                    ]
+                }
+            }
+        },
+        "Piercer" : {
+            "Description" : "It has been there for you your whole life",
+            "Flags" : "Do this whenever 1 - can't unequip until another 1 is equuiped or smthing like that",
+            "KILL" : {
+                "Name" : "Shoot",
+                "Chance" : 80,
+                "Succes" : {
+                    "Effect" : "Shot",
+                    "Heal" : 10,
+                    "Damage" : 2,
+                    "Cooldown" : 2,
+                    "Explosion" : 0,
+                    "Messages" : [
+                        ["HEADSHOT!!!"]
+                    ]
+                },
+                "Fail" : {
+                    "Effect" : "Shot",
+                    "Heal" : 10,
+                    "Damage" : 1,
+                    "Explosion" : 0,
+                    "Cooldown" : 2,
+                    "Messages" : [
+                        ["Hit em"]
+                    ]
                 }
             },
             "SSSTYLE" : {

@@ -307,7 +307,7 @@ func InputOptionText() -> void:
 		PlayerPos.Kill:
 			if GetStageChange():
 				higlightEnemy = true
-				optionSize = 1
+				optionSize = 0
 				var finalStr = []
 				var num = 0
 				for wepon in LoadedWepons:
@@ -318,6 +318,7 @@ func InputOptionText() -> void:
 						else:
 							finalStr.append(wepon["KILL"]["Name"])
 					num += 1
+					optionSize += 1
 				DisplayDiologue(finalStr)
 			else:
 				if Input.is_action_just_pressed("Jump"):
@@ -898,6 +899,7 @@ func attacks_delete_em() -> void:
 func UpdatePlayersHp(delta):
 	playersPrevHp += (Global.player_health-playersPrevHp) * delta
 	health.text = str(floori(playersPrevHp)) + "/" + str(Global.player_max_health)
+	health.modulate = Color(1,playersPrevHp / Global.player_max_health,playersPrevHp / Global.player_max_health,1)
 
 func _physics_process(delta):
 	updateDmgNumbers(delta)

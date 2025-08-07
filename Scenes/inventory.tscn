@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3 uid="uid://b5uuxuuteln02"]
+
+[ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="1_wdn4f"]
+[ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="2_0n8tc"]
+[ext_resource type="Script" uid="uid://c4xatg2fywbb8" path="res://Scenes/GrabFocus.gd" id="3_k1vlg"]
+[ext_resource type="PackedScene" uid="uid://b53a1hd251axt" path="res://Scenes/main_menu.tscn" id="4_c5ffv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5gp2"]
+shader = ExtResource("1_wdn4f")
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -60
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0.188235, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+z_index = -50
+material = SubResource("ShaderMaterial_k5gp2")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+z_index = -40
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+color = Color(0, 0, 0, 0.588235)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_0n8tc")
+theme_override_font_sizes/font_size = 40
+text = "PLAY"
+script = ExtResource("3_k1vlg")
+FIRST = true
+SWITCH_SCENE = ExtResource("4_c5ffv")

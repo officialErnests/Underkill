@@ -14,7 +14,8 @@ func _ready() -> void:
 func save_func():
     scores.append(score)
     scores.sort()
-    if scores.size() > 10: score.pop_back()
+    if scores.size() > 10: score.pop_front()
+    scores.reverse()
     save_game({"Scores":scores})
 
 
