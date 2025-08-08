@@ -107,73 +107,96 @@ process_material = SubResource("ParticleProcessMaterial_6l1uj")
 
 [node name="Blood" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("3_tohpi")
+volume_db = -30.0
 
 [node name="Jump" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("4_j0n07")
+volume_db = -30.0
 
 [node name="ChainSaw" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("5_l5f43")
+volume_db = -30.0
 
 [node name="CoinThrow" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("6_nsjf2")
+volume_db = -30.0
 
 [node name="Explosion" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("7_k8108")
+volume_db = -30.0
 
 [node name="FistReload" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("8_eji56")
+volume_db = -30.0
 
 [node name="FootstepHeavy1" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("9_be5op")
+volume_db = -30.0
 
 [node name="FootstepHeavy2" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("10_uxbqn")
+volume_db = -30.0
 
 [node name="FootstepHeavy3" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("11_gewhk")
+volume_db = -30.0
 
 [node name="FootstepHeavy4" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("12_rbd1f")
+volume_db = -30.0
 
 [node name="HpGet" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("13_sc4nj")
+volume_db = -30.0
 
 [node name="Fist" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("14_ld72d")
+volume_db = -30.0
 
 [node name="LandingHeavy" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("15_geoio")
+volume_db = -30.0
 
 [node name="Landing" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("16_l5f43")
+volume_db = -30.0
 
 [node name="PunchProjectile" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("16_ccm32")
+volume_db = -30.0
 
 [node name="RailcannonFire" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("17_wjm0j")
+volume_db = -30.0
 
 [node name="Ricochet" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("18_ce7b5")
+volume_db = -30.0
 
 [node name="Shoot" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("19_lirlu")
+volume_db = -30.0
 
 [node name="Shotgunpump" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("20_1indm")
+volume_db = -30.0
 
 [node name="SteampunkWeapons-Shotgun2-Shot-03" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("21_r0wpg")
+volume_db = -30.0
 
 [node name="Twirling" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("22_ppv6p")
+volume_db = -30.0
 
 [node name="Wallcling" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("23_xf0sj")
+volume_db = -30.0
 
 [node name="Whoosh" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("24_wukho")
-volume_db = -20.0
+volume_db = -30.0
 
 [node name="Dash" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("25_j0n07")
+volume_db = -30.0

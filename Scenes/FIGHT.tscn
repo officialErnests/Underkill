@@ -181,16 +181,28 @@ CagePosition = Vector2(0, 70)
 CageSize = Vector2(0, 0)
 
 [node name="CrowdApplause" parent="Cage/Audio" index="0"]
-volume_db = -10.0
+volume_db = -30.0
 
 [node name="CrowdCheerLong" parent="Cage/Audio" index="1"]
-volume_db = -10.0
+volume_db = -30.0
+
+[node name="Switch" parent="Cage/Audio" index="2"]
+volume_db = -30.0
+
+[node name="Start" parent="Cage/Audio" index="3"]
+volume_db = -30.0
+
+[node name="Cant" parent="Cage/Audio" index="4"]
+volume_db = -30.0
 
 [node name="Pick" parent="Cage/Audio" index="5"]
-volume_db = -10.0
+volume_db = -30.0
 
 [node name="Back" parent="Cage/Audio" index="6"]
-volume_db = -10.0
+volume_db = -30.0
+
+[node name="Exit" parent="Cage/Audio" index="7"]
+volume_db = -30.0
 
 [node name="Enemies" type="Node2D" parent="."]
 z_index = -20
@@ -208,7 +220,7 @@ offset_bottom = -180.0
 
 [node name="SlapYAre" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_3gfpi")
-volume_db = -20.0
+volume_db = -30.0
 autoplay = true
 
 [editable path="Cage"]

@@ -1,87 +1,152 @@
 {
-    "Filfth" : {
-        "Health" : 0.5,
-        "Damage" : 30,
-        "Body" : "Filfth",
-        "Points" : 10,
-        "Width" : 50,
-        "DmgAudio" : "ZombieWeakDeathReverse",
-        "DeathAudio" : "ZombieWeakDeath",
-        "Intro" : [
-            ["Filfth jumps in!"],
-            ["Filfth TRIES TO BITE YOUR TOES",
-            "Also said \"GRRRRRrrr....\""]
-        ],
-        "Interactions" : {
-            "Check" : [
-                ["Filfth - ATK 30 HP 0.5",
-                "Seems hungry, hungry boi",
-            "Filfth - \"RAGHhhh...\""],
-                ["Filfth - ATK 30 HP 0.5",
-                "\"RAGH ARGH RAWR\" - Filfth",
-                "Truly wise words"]
-            ],
-            "Insult" : [
-                ["You call him blind",
-                "He seems to not hear that",
-                "You don't seem to be suprised"],
-                ["You try to get his attention",
-                "He runs into wall",
-                "He do be playing blind"]
-            ]
-        },
-        "Attacks" : {
-            "CAGE_SMALL" : [{
-                "Projectile" : "filfth_bullet",
-                "Damage" : 30,
-                "AttackPatern" : "Bounce",
-                "AttackPaternsParams" : ["OutsideL", 1, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 1]
-                },
-                {
-                "Projectile" : "filfth_bullet_small",
-                "Damage" : 10,
-                "AttackPatern" : "Bounce",
-                "AttackPaternsParams" : ["OutsideL", 2, 0.5, 3, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
-                }
-            ]
-        }
-    },
-    "Stray" : {
-        "Health" : 1.5,
-        "Damage" : 25,
-        "Body" : "Stray",
-        "Points" : 20,
-        "Width" : 50,
-        "DmgAudio" : "ZombieDamage1",
-        "DeathAudio" : "ZombieDeath",
-        "Intro" : [
-            ["Stray, spawns in"],
-            ["As stray wobles in"]
-        ],
-        "Interactions" : {
-            "Check" : [
-                ["Stray - ATK 25 HP 1.5",
-                "They look angry"],
-                ["Stray - ATK 25 HP 1.5",
-                "As they woble around the room",
-                "Untill they face you"]
-            ],
-            "Aproach them" : [
-                ["As you aproach them",
-                "They looks fearless",
-                "Just standing there"],
-                ["As you walk towards",
-                "They fling projctile"]
-            ]
-        },
-        "Attacks" : {
-            "CAGE_SMALL" : [{
-                "Projectile" : "Stray_bullet",
-                "Damage" : 20,
-                "AttackPatern" : "Trogh",
-                "AttackPaternsParams" : ["Sides", 100, 0.5, 5, [[1,0],[-1,0]], 1]
-                }
-            ]
-        }
-    }
+	"Filfth" : {
+		"Health" : 0.5,
+		"Damage" : 30,
+		"Body" : "Filfth",
+		"Points" : 10,
+		"Width" : 50,
+		"DmgAudio" : "ZombieWeakDeathReverse",
+		"DeathAudio" : "ZombieWeakDeath",
+		"Intro" : [
+			["Filfth jumps in!"],
+			["Filfth TRIES TO BITE YOUR TOES",
+			"Also said \"GRRRRRrrr....\""]
+		],
+		"Interactions" : {
+			"Check" : [
+				["Filfth - ATK 30 HP 0.5",
+				"Seems hungry, hungry boi",
+			"Filfth - \"RAGHhhh...\""],
+				["Filfth - ATK 30 HP 0.5",
+				"\"RAGH ARGH RAWR\" - Filfth",
+				"Truly wise words"]
+			],
+			"Insult" : [
+				["You call him blind",
+				"He seems to not hear that",
+				"You don't seem to be suprised"],
+				["You try to get his attention",
+				"He runs into wall",
+				"He do be playing blind"]
+			]
+		},
+		"Attacks" : {
+			"CAGE_SMALL" : [{
+				"Projectile" : "filfth_bullet",
+				"Damage" : 30,
+				"AttackPatern" : "Bounce",
+				"AttackPaternsParams" : ["OutsideL", 1, 0.5, 2, [[1,1],[1,-1],[-1,1],[-1,-1]], 1]
+				},
+				{
+				"Projectile" : "filfth_bullet_small",
+				"Damage" : 10,
+				"AttackPatern" : "Bounce",
+				"AttackPaternsParams" : ["OutsideL", 2, 0.5, 3, [[1,1],[1,-1],[-1,1],[-1,-1]], 0.5]
+				}
+			]
+		}
+	},
+	"Stray" : {
+		"Health" : 1.5,
+		"Damage" : 25,
+		"Body" : "Stray",
+		"Points" : 20,
+		"Width" : 50,
+		"DmgAudio" : "ZombieDamage1",
+		"DeathAudio" : "ZombieDeath",
+		"Intro" : [
+			["Stray, spawns in"],
+			["As stray wobles in"]
+		],
+		"Interactions" : {
+			"Check" : [
+				["Stray - ATK 25 HP 1.5",
+				"They look angry"],
+				["Stray - ATK 25 HP 1.5",
+				"As they woble around the room",
+				"Untill they face you"]
+			],
+			"Aproach them" : [
+				["As you aproach them",
+				"They looks fearless",
+				"Just standing there"],
+				["As you walk towards",
+				"They fling projctile"]
+			]
+		},
+		"Attacks" : {
+			"CAGE_SMALL" : [{
+				"Projectile" : "Stray_bullet",
+				"Damage" : 20,
+				"AttackPatern" : "Trogh",
+				"AttackPaternsParams" : ["Sides", 100, 0.5, 5, [[1,0],[-1,0]], 1]
+				}
+			]
+		}
+	},
+	"Schism" : {
+		"Health" : 5,
+		"Damage" : 25,
+		"Body" : "Schism",
+		"Points" : 30,
+		"Width" : 100,
+		"DmgAudio" : "ZombieWeakDeathReverse",
+		"DeathAudio" : "ZombieWeakDeath",
+		"Intro" : [
+			["Schism, spawns in"]
+		],
+		"Interactions" : {
+			"Check" : [
+				["Schism - ATK 25 HP 5",
+				"They look angry"]
+			],
+			"Aproach them" : [
+				["As you aproach them",
+				"They looks fearless",
+				"Just standing there"],
+				["As you walk towards",
+				"They fling projctile"]
+			]
+		},
+		"Attacks" : {
+			"CAGE_SMALL" : [{
+				"Projectile" : "Stray_bullet",
+				"Damage" : 25,
+				"AttackPatern" : "Trogh",
+				"AttackPaternsParams" : ["Sides", 5, 0.1, 5, [[1,0.5],[-1,0.5]], 0.5]
+				}
+			]
+		}
+	},
+	"Maurice" : {
+		"Health" : 15,
+		"Damage" : 25,
+		"Body" : "Maurice",
+		"Points" : 30,
+		"Width" : 80,
+		"DmgAudio" : "ZombieWeakDeathReverse",
+		"DeathAudio" : "ZombieWeakDeath",
+		"Intro" : [
+			["Maurice, spawns in"]
+		],
+		"Interactions" : {
+			"Check" : [
+				["Maurice - ATK 25 HP 15",
+				"They look angry"]
+			],
+			"Look at em" : [
+				["They seemingly float",
+				"Wait no they have spider legs"]
+			]
+		},
+		"Attacks" : {
+			"CAGE_SMALL" : [{
+				"Projectile" : "Maurice_bullet",
+				"Damage" : 25,
+				"AttackPatern" : "Trogh",
+				"AttackPaternsParams" : ["Sides", 100, 1, 5, [[1,0.1],[-1,-0.1]], 1]
+				}
+			]
+		}
+	}
 }

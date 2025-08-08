@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://b72liq8or3eek"]
+
+[ext_resource type="Texture2D" uid="uid://cqxyc6330fni8" path="res://Assets/Charecters/Enemies/Schism_head.png" id="1_rb1kd"]
+[ext_resource type="Script" uid="uid://ckg7mei5koxcn" path="res://Scripts/Play.gd" id="2_tceir"]
+[ext_resource type="Texture2D" uid="uid://h6keuq17sgbf" path="res://Assets/Charecters/Enemies/Schism_body.png" id="3_tceir"]
+[ext_resource type="AudioStream" uid="uid://dg65p32tyjakl" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death Reverse.wav" id="4_2jo6g"]
+[ext_resource type="AudioStream" uid="uid://cu7mpqbw0ldif" path="res://Assets/UltrakillAudio/Filfth/Zombie Weak Death.wav" id="5_r2536"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_slfsn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_rb1kd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="Enemy_Preset" type="Node2D"]
+z_index = -2
+
+[node name="HeadAttach" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HeadAttach"]
+texture_filter = 1
+position = Vector2(8, -56)
+scale = Vector2(1.7, 1.7)
+sprite_frames = SubResource("SpriteFrames_slfsn")
+script = ExtResource("2_tceir")
+
+[node name="BodyAttach" type="Node2D" parent="."]
+
+[node name="Body" type="Sprite2D" parent="BodyAttach"]
+z_index = -1
+texture_filter = 1
+position = Vector2(1, -48)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("3_tceir")
+
+[node name="Health" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+
+[node name="Control" type="Control" parent="Health"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -140.0
+offset_right = 30.0
+offset_bottom = -130.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bg" type="ColorRect" parent="Health/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.25, 0.25, 0.25, 1)
+
+[node name="Health" type="ColorRect" parent="Health/Control"]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 1, 0, 1)
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="ZombieWeakDeathReverse" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_2jo6g")
+volume_db = -10.0
+
+[node name="ZombieWeakDeath" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("5_r2536")
+volume_db = -10.0

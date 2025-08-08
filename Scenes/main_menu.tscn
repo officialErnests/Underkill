@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b53a1hd251axt"]
+[gd_scene load_steps=8 format=3 uid="uid://b53a1hd251axt"]
 
 [ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="1_48xlc"]
 [ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="2_1ehe0"]
 [ext_resource type="Script" uid="uid://c4xatg2fywbb8" path="res://Scenes/GrabFocus.gd" id="3_1ehe0"]
 [ext_resource type="AudioStream" uid="uid://ds4r0kq75ryju" path="res://Assets/CoolAudio/Sad.wav" id="4_ce3w2"]
 [ext_resource type="PackedScene" uid="uid://duumy4wts4l7d" path="res://Scenes/FIGHT.tscn" id="4_cp0ys"]
-[ext_resource type="PackedScene" uid="uid://b5uuxuuteln02" path="res://Scenes/inventory.tscn" id="5_cp0ys"]
 [ext_resource type="Script" uid="uid://byn48qw8f58tp" path="res://Scenes/HI_score.gd" id="5_opfnp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ce3w2"]
@@ -105,13 +104,13 @@ script = ExtResource("3_1ehe0")
 FIRST = true
 SWITCH_SCENE = ExtResource("4_cp0ys")
 
-[node name="Equipment" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="Fun" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_1ehe0")
 theme_override_font_sizes/font_size = 40
-text = "Equipment"
+text = "Fun ;)"
 script = ExtResource("3_1ehe0")
-SWITCH_SCENE = ExtResource("5_cp0ys")
+SWITCH_SCENE = ExtResource("4_cp0ys")
 
 [node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2

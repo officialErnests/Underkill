@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://cppw8snjx3sqy" path="res://Shaders/BG.gdshader" id="1_wdn4f"]
 [ext_resource type="FontFile" uid="uid://cy7d8kual1clx" path="res://Fonts/8bitoperator_jve.ttf" id="2_0n8tc"]
 [ext_resource type="Script" uid="uid://c4xatg2fywbb8" path="res://Scenes/GrabFocus.gd" id="3_k1vlg"]
-[ext_resource type="PackedScene" uid="uid://b53a1hd251axt" path="res://Scenes/main_menu.tscn" id="4_c5ffv"]
+[ext_resource type="PackedScene" uid="uid://duumy4wts4l7d" path="res://Scenes/FIGHT.tscn" id="4_c5ffv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k5gp2"]
 shader = ExtResource("1_wdn4f")
@@ -70,9 +70,15 @@ color = Color(0, 0, 0, 0.588235)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.0
+offset_top = -24.5
+offset_right = 39.0
+offset_bottom = 24.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -80,7 +86,8 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_0n8tc")
 theme_override_font_sizes/font_size = 40
-text = "PLAY"
+text = "Back
+"
 script = ExtResource("3_k1vlg")
 FIRST = true
 SWITCH_SCENE = ExtResource("4_c5ffv")

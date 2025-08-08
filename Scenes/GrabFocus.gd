@@ -11,5 +11,7 @@ func func_button_up() -> void:
     if not SWITCH_SCENE: 
         get_tree().quit()
         return
+    if name == "Fun" : Global.fun_mode = true
+    else : Global.fun_mode = false
     get_tree().change_scene_to_packed(SWITCH_SCENE)
 

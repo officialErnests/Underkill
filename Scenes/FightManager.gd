@@ -107,7 +107,9 @@ var optOptions = 0
 
 var enemies = [
 	["Filfth",1],
-	["Stray",2]
+	["Stray",2],
+	["Schism",3],
+	["Maurice",5]
 ]
 var attackEnemies = []
 var allEnemies = []
@@ -164,14 +166,14 @@ func Restart():
 	ENEMY_INTRO = 1.0
 	enemyIntro = 0
 	enemyAttack = 0
-	ENEMY_ATTACK_TIME = 10
+	ENEMY_ATTACK_TIME = 5
 	PlayerSel = PlayerPos.Kill
 	attackDebounce = []
 	LoadedWepons = []
 	WeponRecharge = []
 	# playersHealth = 100
 	var difficulty = fightRewards / 10.0 + 3
-	for i in range(7):
+	for i in range(7 if not Global.fun_mode else 100):
 		var randomEnemy = enemies.pick_random()
 		attackEnemies.append(randomEnemy[0])
 		difficulty -= randomEnemy[1]
@@ -206,7 +208,7 @@ func Restart():
 		totalWidth += enemy["Width"]
 		enemy["Body"].position = Vector2(totalWidth - enemy["Width"]/2,0)
 		enemy["PosOffset"] = Vector2(totalWidth - enemy["Width"]/2,0)
-	for weponName in players_json["Equiped"]:
+	for weponName in Global.equiped:
 		LoadedWepons.append(players_json["Items"][weponName])
 		WeponRecharge.append(0)
 
@@ -321,6 +323,7 @@ func InputOptionText() -> void:
 					optionSize += 1
 				DisplayDiologue(finalStr)
 			else:
+				attackRange = LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Explosion"]
 				if Input.is_action_just_pressed("Jump"):
 					if WeponRecharge[weponMap[optOptions]] <= 0:
 						StageSet = StageSets.PLAYER_ATTACK
@@ -341,10 +344,11 @@ func InputOptionText() -> void:
 		PlayerPos.SSStyle:
 			if GetStageChange():
 				higlightEnemy = true
-				optionSize = 1
+				optionSize = 0
 				var finalStr = []
 				var num = 0
 				for wepon in LoadedWepons:
+					optionSize += 1
 					if wepon["SSSTYLE"]:
 						weponMap.append(num)
 						if WeponRecharge[num] > 0:
@@ -354,6 +358,7 @@ func InputOptionText() -> void:
 					num += 1
 				DisplayDiologue(finalStr)
 			else:
+				attackRange = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Explosion"]
 				if Input.is_action_just_pressed("Jump"):
 					if WeponRecharge[weponMap[optOptions]] <= 0:
 						StageSet = StageSets.PLAYER_ATTACK
@@ -398,11 +403,13 @@ func InputPlayerAttack() -> void:
 						if LoadedWepons[weponMap[optOptions]]["KILL"]["Chance"] >= randf_range(0,100):
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Cooldown"]
-							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
+							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Damage"], LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Explosion"], LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Effect"])
+							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["KILL"]["Succes"]["Heal"], Global.player_max_health - Global.player_health)
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Cooldown"]
-							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Effect"])
+							attack(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Damage"], LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Explosion"], LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Effect"])
+							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["KILL"]["Fail"]["Heal"], Global.player_max_health - Global.player_health)
 				else:
 					if skipAttack:
 						if Input.is_action_just_pressed("Jump"): #I am god at commenting my code B)
@@ -431,17 +438,17 @@ func InputPlayerAttack() -> void:
 						if LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Chance"] >= randf_range(0,100):
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Cooldown"]
-							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Effect"])
+							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Damage"], LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Explosion"], LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Effect"])
 							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Succes"]["Heal"], Global.player_max_health - Global.player_health)
 						else:
 							DisplayDiologue(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Messages"].pick_random())
 							WeponRecharge[weponMap[optOptions]] = LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Cooldown"]
-							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Damage"], 0, LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Effect"])
+							attack(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Damage"], LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Explosion"], LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Effect"])
 							Global.player_health += min(LoadedWepons[weponMap[optOptions]]["SSSTYLE"]["Fail"]["Heal"], Global.player_max_health - Global.player_health)
 			PlayerPos.Nomercy:
 				if GetStageChange():
 					attack(8, 1, "Shot")
-					nomercyColldown = 10
+					nomercyColldown = 5
 					DisplayDiologue(["YOU USED THE RAILCANON",
 									"ENEMIES ARE TOTALY VAPORIZED",
 									"you can say they got...",
@@ -559,6 +566,7 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 		if attackStage == 3:#dmg
 			if attackDebounce[higindex]:
 				enemy["Health"] -= attackDmg
+				enemy["Body"].get_child(3).get_node(enemy["DmgAudio"]).volume_db = - 30
 				enemy["Body"].get_child(3).get_node(enemy["DmgAudio"]).play()
 				attackDebounce[higindex] = false
 				var tempDmgNumber = dmgNumb.instantiate()
@@ -572,7 +580,8 @@ func UpdateEnemi(delta, color, size, position2) -> void:
 					for nothing in range(attackDebounce.size()): attackDebounce.pop_front()
 				attackStage += 1
 		if attackStage == 4:#check if enemy died and play animation
-			if enemy["Health"] < 0:
+			if enemy["Health"] <= 0:
+				enemy["Body"].get_child(3).get_node(enemy["DeathAudio"]).volume_db = - 30
 				enemy["Body"].get_child(3).get_node(enemy["DeathAudio"]).play()
 				fightRewards += enemy["Points"]
 				var random1 = randf_range(-00,100)
@@ -744,7 +753,7 @@ func attackInit() -> void:
 	attackCage = ["CAGE_SMALL"].pick_random()
 	#then add attack randomizer
 	#add so other enemies try to attack aswell (3 enemies at max maybe)
-	for indx in range(min(3, allEnemies.size())):
+	for indx in range(min(3 if not Global.fun_mode else 100, allEnemies.size())):
 		var pickedEnemy = allEnemies.pick_random()
 		#idk how but somehow the bullet is loaded in Realy 0 clue
 		var pickedAttack = pickedEnemy["Attacks"][attackCage].pick_random()
@@ -924,6 +933,7 @@ func _physics_process(delta):
 			SwitchGui(GuiStages.OPTIONS)
 			var randEn = allEnemies.pick_random()
 			if LastStage != StageSets.PLAYER_MENU:
+				randEn["Body"].get_child(3).get_node(randEn["DmgAudio"]).volume_db = - 30
 				randEn["Body"].get_child(3).get_node(randEn["DmgAudio"]).play()
 				DisplayDiologue(randEn["Intro"].pick_random())
 	elif StageSet == StageSets.ADVANCED_OPTIONS:
@@ -961,6 +971,7 @@ func _physics_process(delta):
 				for wep in range(WeponRecharge.size()):
 					if WeponRecharge[wep] > 0:
 						WeponRecharge[wep] -= 1
+				nomercyColldown -= 1
 			enemyAttack += delta
 			SetCageSize("CAGE_SMALL")
 		atacksUpdater(delta)

@@ -149,7 +149,6 @@ text = "Give up"
 stream = ExtResource("4_u4dtd")
 volume_db = -5.0
 autoplay = true
-stream_paused = true
 
 [connection signal="button_up" from="VBoxContainer/Respawn" to="." method="_on_button_button_up"]
 [connection signal="button_up" from="VBoxContainer/Give_Up" to="." method="_on_give_up_button_up"]
