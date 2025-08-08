@@ -118,4 +118,8 @@ Dashing makes you invincible :P
 > - Bullets deal dmg
 > - you can heal from parry
 > - You can die real quickly XD
+
 #Won't update takes too mutch time XD
+#THIS IS NOT UPDATEDET (takes too mutch time XD)
+litrally miricle it pushed ont server 
+[i was going nuts yestraday]
